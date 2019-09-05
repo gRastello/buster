@@ -141,6 +141,38 @@ bool testFETCH() {
 	return true;
 }
 
+// Test the DUP isntruction.
+bool testDUP() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Initialize the ram.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0xA3;
+	bus->ram[0x0002] = 0x05; // DUP
+	bus->ram[0x0003] = 0x00;
+
+	// Run the machine.
+	while(bus->cpu.running) bus->cpu.clock();
+
+	//Check results.
+	uint16_t sp = bus->cpu.getSP();
+
+	sp++;
+	if (bus->read(sp) != 0xA3) {
+		reportMismatch("DUP", "0xA3", bus->read(sp));
+		return false;
+	}
+
+	sp++;
+	if (bus->read(sp) != 0xA3) {
+		reportMismatch("DUP", "0xA3", bus->read(sp));
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
@@ -148,6 +180,7 @@ int main() {
 		{ "DROP",  &testDROP },
 		{ "STORE", &testSTORE },
 		{ "FETCH", &testFETCH },
+		{ "DUP",   &testDUP },
 	};
 
 	// Execute the tests.

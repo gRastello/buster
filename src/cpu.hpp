@@ -35,6 +35,7 @@ private:
 	void DROP();
 	void STORE();
 	void FETCH();
+	void DUP();
 
 #ifdef TEST
 public:

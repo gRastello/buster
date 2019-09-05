@@ -27,6 +27,9 @@ void Cpu::clock() {
 	case 0x04:
 		FETCH();
 		break;
+	case 0x05:
+		DUP();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -94,4 +97,11 @@ void Cpu::FETCH() {
 	uint16_t addr = ((uint16_t)hn << 8) | (uint16_t)ln;
 
 	write(sp, read(addr)); sp--;
+}
+
+// DUP
+// Duplicate the first element of the stack and put it on top of the stack.
+void Cpu::DUP() {
+	uint8_t data = read(sp + 1);
+	write(sp, data); sp--;
 }

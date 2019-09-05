@@ -1,6 +1,8 @@
 #include "bus.hpp"
 #include "cpu.hpp"
 
+#include <iostream>
+
 Cpu::Cpu() { }
 Cpu::~Cpu() { }
 
@@ -22,7 +24,12 @@ void Cpu::clock() {
 	case 0x03:
 		STORE();
 		break;
+	case 0x04:
+		FETCH();
+		break;
 	default: // We default to the HALT instruction.
+		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
+		          << "(invoking HALT instead)" << std::endl;
 		HALT();
 		break;
 	}
@@ -75,4 +82,16 @@ void Cpu::STORE() {
 	uint16_t addr = ((uint16_t)hn << 8) | (uint16_t)ln;
 
 	sp++; write(addr, read(sp));
+}
+
+// FETCH
+// Store to the stack the value pointed to by the first two elements of the 
+// stack (the first one representing the higher nibble and the second one the 
+// lower of the address).
+void Cpu::FETCH() {
+	sp++; uint8_t hn = read(sp);
+	sp++; uint8_t ln = read(sp);
+	uint16_t addr = ((uint16_t)hn << 8) | (uint16_t)ln;
+
+	write(sp, read(addr)); sp--;
 }

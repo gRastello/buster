@@ -112,12 +112,42 @@ bool testSTORE() {
 	return true;
 }
 
+// Test the FETCH function.
+bool testFETCH() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Populate memory.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0xFF;
+	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0003] = 0x01;
+	bus->ram[0x0004] = 0x04; // FETCH
+	bus->ram[0x0005] = 0x00; // HALT
+
+	bus->ram[0x01FF] = 0x22;
+
+	// Run the machine.
+	while(bus->cpu.running) bus->cpu.clock();
+
+	// Check results.
+	uint16_t sp = bus->cpu.getSP();
+	sp++;
+	if (bus->read(sp) != 0x22) {
+		reportMismatch("FETCH", "0x22", bus->read(sp));
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
 		{ "LIT",   &testLIT },
 		{ "DROP",  &testDROP },
 		{ "STORE", &testSTORE },
+		{ "FETCH", &testFETCH },
 	};
 
 	// Execute the tests.

@@ -15,6 +15,6 @@ public:
 	void write(uint16_t addr, uint8_t data);
 
 	// Devices attached to the bus.
-	std::array<uint8_t, 256> ram;
+	std::array<uint8_t, 0xFFFF + 1> ram;
 	Cpu cpu;
 };

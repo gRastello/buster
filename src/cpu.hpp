@@ -14,6 +14,7 @@ public:
 
 	// Perform a clock (in the case of Stacky a whole instruction).
 	void clock();
+	uint64_t clockCount = 0;
 
 	// Connect to the bus.
 	void connectToBus(Bus *x) { bus = x; }
@@ -30,4 +31,5 @@ private:
 
 	// Instructions.
 	void HALT();
+	void LIT();
 };

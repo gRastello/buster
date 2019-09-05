@@ -13,10 +13,16 @@ void Cpu::clock() {
 	case 0x00:
 		HALT();
 		break;
+	case 0x01:
+		LIT();
+		break;
 	default: // We default to the HALT instruction.
 		HALT();
 		break;
 	}
+
+	// Increase the clock counter.
+	clockCount++;
 }
 
 uint8_t Cpu::read(uint16_t addr) {
@@ -27,7 +33,22 @@ void Cpu::write(uint16_t addr, uint8_t data) {
 	bus->write(addr, data);
 }
 
-// Instructions
+/* ************
+ * Instructions 
+ * ************ */
+
+// HALT
+// Stops the machine.
 void Cpu::HALT() {
 	running = false;
+}
+
+// LIT
+// Loads an immediate value on the stack.
+void Cpu::LIT() {
+	uint8_t data = read(pc);
+	pc++;
+
+	write(sp, data);
+	sp--;
 }

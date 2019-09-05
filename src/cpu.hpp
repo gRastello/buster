@@ -33,6 +33,7 @@ private:
 	void HALT();
 	void LIT();
 	void DROP();
+	void STORE();
 
 #ifdef TEST
 public:

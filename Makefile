@@ -22,7 +22,7 @@ build/bus.o: src/bus.cpp src/bus.hpp src/cpu.hpp
 run: build/stacky
 	./build/stacky
 
-build/test: src/test.cpp src/stacky.hpp src/bus.hpp src/cpu.hpp
+build/test: src/test.cpp src/stacky.cpp src/bus.cpp src/cpu.cpp
 	mkdir -p build
 	g++ -o build/test src/test.cpp
 

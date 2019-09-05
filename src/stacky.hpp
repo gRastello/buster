@@ -14,4 +14,9 @@ public:
 private:
 	// The main bus.
 	Bus bus;
+
+#ifdef TEST
+public:
+	Bus *getBusPtr() { return &bus; }
+#endif
 };

@@ -32,4 +32,10 @@ private:
 	// Instructions.
 	void HALT();
 	void LIT();
+
+#ifdef TEST
+public:
+	uint16_t getPC() { return pc; }
+	uint16_t getSP() { return sp; }
+#endif
 };

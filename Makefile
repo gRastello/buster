@@ -1,4 +1,6 @@
-stacky: build/main.o build/stacky.o build/cpu.o build/bus.o
+default: stacky
+
+stacky: runtest build/main.o build/stacky.o build/cpu.o build/bus.o
 	g++ -o build/stacky build/main.o build/stacky.o build/cpu.o build/bus.o
 	
 build/main.o: src/main.cpp src/stacky.hpp
@@ -19,3 +21,10 @@ build/bus.o: src/bus.cpp src/bus.hpp src/cpu.hpp
 
 run: build/stacky
 	./build/stacky
+
+build/test: src/test.cpp src/stacky.hpp src/bus.hpp src/cpu.hpp
+	mkdir -p build
+	g++ -o build/test src/test.cpp
+
+runtest: build/test
+	./build/test

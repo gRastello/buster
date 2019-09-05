@@ -36,6 +36,9 @@ void Cpu::clock() {
 	case 0x07:
 		SWAP();
 		break;
+	case 0x08:
+		IF();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -125,4 +128,23 @@ void Cpu::SWAP() {
 	uint8_t tmp = read(sp + 2);
 	write(sp + 2, read(sp + 1));
 	write(sp + 1, tmp);
+}
+
+// IF
+// Jump to the address indicated by the following two bytes if the first element
+// of the stack is zero. The first byte represents the higher nibble of the 
+// address, the second one the lower nibble. The first element of the stack is 
+// popped.
+void Cpu::IF() {
+	sp++; uint8_t head = read(sp);
+
+	if (head == 0) {
+		uint8_t hn = read(pc); pc++;
+		uint8_t ln = read(pc);
+		uint16_t addr = ((uint16_t)hn << 8) | (uint16_t)ln;
+
+		pc = addr;
+	} else {
+		pc += 2;
+	}
 }

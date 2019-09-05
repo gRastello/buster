@@ -38,6 +38,7 @@ private:
 	void DUP();
 	void OVER();
 	void SWAP();
+	void IF();
 
 #ifdef TEST
 public:

@@ -191,7 +191,6 @@ bool testOVER() {
 
 	// Check results.
 	uint16_t sp = bus->cpu.getSP();
-	std::cout << "sp: 0x" << std::hex << unsigned(sp) << std::endl;
 
 	sp++;
 	if (bus->read(sp) != 0xE1) {
@@ -248,13 +247,66 @@ bool testSWAP() {
 	return true;
 }
 
+// Test the IF instruction.
+bool testIF_branch() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Initialize the ram.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0x00;
+	bus->ram[0x0002] = 0x08; // IF
+	bus->ram[0x0003] = 0x11;
+	bus->ram[0x0004] = 0x11;
+
+	bus->ram[0x1111] = 0x00; // HALT
+
+	// Run the machine.
+	while (bus->cpu.running) bus->cpu.clock();
+
+	// Check results.
+	uint16_t pc = bus->cpu.getPC();
+	if (pc != 0x1112) {
+		reportMismatch("IF branch", "0x1112", pc);
+		return false;
+	}
+
+	return true;
+}
+
+bool testIF_nobranch() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Initialize the ram.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0xFF;
+	bus->ram[0x0002] = 0x08; // IF
+	bus->ram[0x0003] = 0x11;
+	bus->ram[0x0004] = 0x11;
+	bus->ram[0x0005] = 0x00; // HALT
+
+	// Run the machine.
+	while (bus->cpu.running) bus->cpu.clock();
+
+	// Check results.
+	uint16_t pc = bus->cpu.getPC();
+	if (pc != 0x0006) {
+		reportMismatch("IF branch", "0x0006", pc);
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
-		{ "LIT",   &testLIT   }, { "DROP",  &testDROP  },
-		{ "STORE", &testSTORE }, { "FETCH", &testFETCH },
-		{ "DUP",   &testDUP   }, { "OVER",  &testOVER  },
-		{ "SWAP",  &testSWAP  },
+		{ "LIT",         &testLIT         }, { "DROP",      &testDROP      },
+		{ "STORE",       &testSTORE       }, { "FETCH",     &testFETCH     },
+		{ "DUP",         &testDUP         }, { "OVER",      &testOVER      },
+		{ "SWAP",        &testSWAP        }, { "IF_branch", &testIF_branch },
+		{ "IF_nobranch", &testIF_nobranch },
 	};
 
 	// Execute the tests.

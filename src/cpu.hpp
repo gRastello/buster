@@ -1,0 +1,33 @@
+#pragma once
+
+#include <cstdint>
+
+class Bus;
+
+class Cpu { 
+public:
+	Cpu();
+	~Cpu();
+
+	// Cpu's status.
+	bool running = true;
+
+	// Perform a clock (in the case of Stacky a whole instruction).
+	void clock();
+
+	// Connect to the bus.
+	void connectToBus(Bus *x) { bus = x; }
+
+private:
+	// Registers.
+	uint16_t pc = 0x0000; // Program counter.
+	uint16_t sp = 0xFFFF; // Stack pointer.
+
+	// Connection to the bus.
+	Bus* bus;
+	uint8_t read(uint16_t addr);
+	void write(uint16_t addr, uint8_t data);
+
+	// Instructions.
+	void HALT();
+};

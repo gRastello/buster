@@ -173,14 +173,53 @@ bool testDUP() {
 	return true;
 }
 
+// Test the OVER instruction.
+bool testOVER() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Initialize the ram.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0xE1;
+	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0003] = 0xE2;
+	bus->ram[0x0004] = 0x06; // OVER
+	bus->ram[0x0005] = 0x00; // HALT
+
+	// Run the machine.
+	while (bus->cpu.running) bus->cpu.clock();
+
+	// Check results.
+	uint16_t sp = bus->cpu.getSP();
+	std::cout << "sp: 0x" << std::hex << unsigned(sp) << std::endl;
+
+	sp++;
+	if (bus->read(sp) != 0xE1) {
+		reportMismatch("OVER", "0xE1", bus->read(sp));
+		return false;
+	}
+
+	sp++;
+	if (bus->read(sp) != 0xE2) {
+		reportMismatch("OVER", "0xE2", bus->read(sp));
+		return false;
+	}
+
+	sp++;
+	if (bus->read(sp) != 0xE1) {
+		reportMismatch("OVER", "0xE1", bus->read(sp));
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
-		{ "LIT",   &testLIT },
-		{ "DROP",  &testDROP },
-		{ "STORE", &testSTORE },
-		{ "FETCH", &testFETCH },
-		{ "DUP",   &testDUP },
+		{ "LIT",   &testLIT   }, { "DROP",  &testDROP  },
+		{ "STORE", &testSTORE }, { "FETCH", &testFETCH },
+		{ "DUP",   &testDUP   }, { "OVER",  &testOVER  },
 	};
 
 	// Execute the tests.

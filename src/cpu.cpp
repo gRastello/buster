@@ -30,6 +30,9 @@ void Cpu::clock() {
 	case 0x05:
 		DUP();
 		break;
+	case 0x06:
+		OVER();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -103,5 +106,12 @@ void Cpu::FETCH() {
 // Duplicate the first element of the stack and put it on top of the stack.
 void Cpu::DUP() {
 	uint8_t data = read(sp + 1);
+	write(sp, data); sp--;
+}
+
+// OVER
+// Push a copy of the second element of the stack to the top of the stack.
+void Cpu::OVER() {
+	uint8_t data = read(sp + 2);
 	write(sp, data); sp--;
 }

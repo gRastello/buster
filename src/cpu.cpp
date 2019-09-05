@@ -33,6 +33,9 @@ void Cpu::clock() {
 	case 0x06:
 		OVER();
 		break;
+	case 0x07:
+		SWAP();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -114,4 +117,12 @@ void Cpu::DUP() {
 void Cpu::OVER() {
 	uint8_t data = read(sp + 2);
 	write(sp, data); sp--;
+}
+
+// SWAP
+// Swap around the first and second elements of the stack.
+void Cpu::SWAP() {
+	uint8_t tmp = read(sp + 2);
+	write(sp + 2, read(sp + 1));
+	write(sp + 1, tmp);
 }

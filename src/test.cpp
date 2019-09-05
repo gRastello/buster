@@ -214,12 +214,47 @@ bool testOVER() {
 	return true;
 }
 
+// Test for the SWAP instruction.
+bool testSWAP() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Initialize ram.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0x0F;
+	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0003] = 0xF0;
+	bus->ram[0x0004] = 0x07; // SWAP
+	bus->ram[0x0005] = 0x00; // HALT
+
+	// Run the machine.
+	while (bus->cpu.running) bus->cpu.clock();
+
+	// Check the results.
+	uint16_t sp = bus->cpu.getSP();
+
+	sp++;
+	if (bus->read(sp) != 0x0F) {
+		reportMismatch("SWAP", "0x0F", bus->read(sp));
+		return false;
+	}
+
+	sp++;
+	if (bus->read(sp) != 0xF0) {
+		reportMismatch("SWAP", "0xF0", bus->read(sp));
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
 		{ "LIT",   &testLIT   }, { "DROP",  &testDROP  },
 		{ "STORE", &testSTORE }, { "FETCH", &testFETCH },
 		{ "DUP",   &testDUP   }, { "OVER",  &testOVER  },
+		{ "SWAP",  &testSWAP  },
 	};
 
 	// Execute the tests.

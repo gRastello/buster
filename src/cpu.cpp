@@ -16,6 +16,9 @@ void Cpu::clock() {
 	case 0x01:
 		LIT();
 		break;
+	case 0x02:
+		DROP();
+		break;
 	default: // We default to the HALT instruction.
 		HALT();
 		break;
@@ -51,4 +54,10 @@ void Cpu::LIT() {
 
 	write(sp, data);
 	sp--;
+}
+
+// DROP
+// Drop an element from the stack.
+void Cpu::DROP() {
+	sp++;
 }

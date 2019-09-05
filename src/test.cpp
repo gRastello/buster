@@ -59,11 +59,36 @@ bool testLIT() {
 	return true;
 }
 
+// Test the DROP instruction.
+bool testDROP() {
+	Stacky machine;
+	Bus* bus = machine.getBusPtr();
+
+	// Initialize some ram.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0x00;
+	bus->ram[0x0002] = 0x02; // DROP
+	bus->ram[0x0004] = 0x00; // HALT
+
+	// Run the machine.
+	while(bus->cpu.running) bus->cpu.clock();
+
+	// Check the results.
+	uint16_t sp = bus->cpu.getSP();
+
+	if (sp != 0xFFFF) {
+		reportMismatch("DROP", "0xFFFF", sp);
+		return false;
+	}
+
+	return true;
+}
 
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
-		{ "LIT", &testLIT },
+		{ "LIT",  &testLIT },
+		{ "DROP", &testDROP },
 	};
 
 	/* execute the tests */

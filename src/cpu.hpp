@@ -32,6 +32,7 @@ private:
 	// Instructions.
 	void HALT();
 	void LIT();
+	void DROP();
 
 #ifdef TEST
 public:

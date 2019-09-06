@@ -45,6 +45,9 @@ void Cpu::clock() {
 	case 0x10:
 		EXIT();
 		break;
+	case 0x11:
+		ADD();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -180,4 +183,15 @@ void Cpu::EXIT() {
 	sp++; uint8_t hn = read(sp);
 	sp++; uint8_t ln = read(sp);
 	pc = ((uint16_t)hn << 8) | (uint16_t)ln;
+}
+
+// ADD
+// Add the first and second elements of the stack together and puts the sum at 
+// the top of the stack. The two addends are popped.
+void Cpu::ADD() {
+	sp++; uint8_t a = read(sp);
+	sp++; uint8_t b = read(sp);
+	uint8_t result = a + b;
+
+	write(sp, result); sp--;
 }

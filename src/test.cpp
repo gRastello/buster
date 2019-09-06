@@ -416,6 +416,33 @@ bool testSubroutineCall() {
 	return true;
 }
 
+// Test ADD.
+bool testADD() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Populate the RAM.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0x0F;
+	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0003] = 0x03;
+	bus->ram[0x0004] = 0x11; // ADD
+	bus->ram[0x0005] = 0x00; // HALT
+
+	// Run the machine.
+	while (bus->cpu.running) bus->cpu.clock();
+
+	// Check the results.
+	uint16_t sp = bus->cpu.getSP();
+	sp++;
+	if (bus->read(sp) != 0x12) {
+		reportMismatch("ADD", "0x12", bus->read(sp));
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
@@ -425,6 +452,7 @@ int main() {
 		{ "SWAP",        &testSWAP        }, { "IF_branch",       &testIF_branch      },
 		{ "IF_nobranch", &testIF_nobranch }, { "CALL",            &testCALL           },
 		{ "EXIT",        &testEXIT        }, { "Subroutine call", &testSubroutineCall },
+		{ "ADD",         &testADD         },
 	};
 
 	// Execute the tests.

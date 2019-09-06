@@ -40,6 +40,7 @@ private:
 	void SWAP();
 	void IF();
 	void CALL();
+	void EXIT();
 
 #ifdef TEST
 public:

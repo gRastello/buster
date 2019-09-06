@@ -42,6 +42,9 @@ void Cpu::clock() {
 	case 0x09:
 		CALL();
 		break;
+	case 0x10:
+		EXIT();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -166,5 +169,17 @@ void Cpu::CALL() {
 	uint8_t addr_hn = read(pc);
 	uint8_t addr_ln = read(pc + 1);
 	uint16_t addr = ((uint16_t)addr_hn << 8) | (uint16_t)addr_ln;
+	pc = addr;
+}
+
+// EXIT
+// Pops two bytes from the stack and jumps to that address. (as always the first
+// byte is the higher nibble of the address and the second byte the lower 
+// nibble).
+void Cpu::EXIT() {
+	sp++; uint8_t hn = read(sp);
+	sp++; uint8_t ln = read(sp);
+	uint16_t addr = ((uint16_t)hn << 8) | (uint16_t)ln;
+
 	pc = addr;
 }

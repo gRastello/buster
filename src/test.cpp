@@ -345,6 +345,33 @@ bool testCALL() {
 	return true;
 }
 
+// Test the EXIT instruction.
+bool testEXIT() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Initialize the RAM.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0x12;
+	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0003] = 0x23;
+	bus->ram[0x0004] = 0x10; // EXIT
+
+	bus->ram[0x2312] = 0x00; // HALT
+
+	// Run the machine.
+	while (bus->cpu.running) bus->cpu.clock();
+
+	// Check the results.
+	uint16_t pc = bus->cpu.getPC();
+	if (pc != 0x2313) {
+		reportMismatch("EXIT", "0x2313", pc);
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
@@ -353,6 +380,7 @@ int main() {
 		{ "DUP",         &testDUP         }, { "OVER",      &testOVER      },
 		{ "SWAP",        &testSWAP        }, { "IF_branch", &testIF_branch },
 		{ "IF_nobranch", &testIF_nobranch }, { "CALL",      &testCALL      },
+		{ "EXIT",        &testEXIT        },
 	};
 
 	// Execute the tests.

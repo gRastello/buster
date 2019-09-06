@@ -42,6 +42,7 @@ private:
 	void CALL();
 	void EXIT();
 	void ADD();
+	void SUB();
 
 #ifdef TEST
 public:

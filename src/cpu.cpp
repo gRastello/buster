@@ -48,6 +48,9 @@ void Cpu::clock() {
 	case 0x11:
 		ADD();
 		break;
+	case 0x12:
+		SUB();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -192,6 +195,17 @@ void Cpu::ADD() {
 	sp++; uint8_t a = read(sp);
 	sp++; uint8_t b = read(sp);
 	uint8_t result = a + b;
+
+	write(sp, result); sp--;
+}
+
+// SUB
+// Substract the second element of the stack from the first one and pushes the
+// result to the stack (the operands are popped).
+void Cpu::SUB() {
+	sp++; uint8_t a = read(sp);
+	sp++; uint8_t b = read(sp);
+	uint8_t result = a - b;
 
 	write(sp, result); sp--;
 }

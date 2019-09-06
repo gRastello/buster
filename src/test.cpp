@@ -373,7 +373,7 @@ bool testEXIT() {
 }
 
 // Test a simple subroutine call.
-bool testSubroutineCall() {
+bool testSubroutineCall1() {
 	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
@@ -410,6 +410,61 @@ bool testSubroutineCall() {
 	sp++;
 	if (bus->read(sp) != 0xFE) {
 		reportMismatch("Subroutine call", "0xFE", bus->read(sp));
+		return false;
+	}
+
+	return true;
+}
+
+// Test a non-trivial (but stupid) subroutine call.
+bool testSubroutineCall2() {
+	Buster machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Populate the RAM.
+	bus->ram[0x0000] = 0x01; // LIT 0x0F
+	bus->ram[0x0001] = 0x0F;
+	bus->ram[0x0002] = 0x01; // LIT 0x03
+	bus->ram[0x0003] = 0x03;
+	bus->ram[0x0004] = 0x09; // CALL 0x1111
+	bus->ram[0x0005] = 0x11;
+	bus->ram[0x0006] = 0x11;
+	bus->ram[0x0007] = 0x01; // LIT 0x22
+	bus->ram[0x0008] = 0x22;
+	bus->ram[0x0009] = 0x01; // LIT 0x22
+	bus->ram[0x000A] = 0x22;
+	bus->ram[0x000B] = 0x03; // STORE
+	bus->ram[0x000C] = 0x00; // HALT
+
+	bus->ram[0x1111] = 0x01; // LIT 0x00
+	bus->ram[0x1112] = 0x00;
+	bus->ram[0x1113] = 0x01; // LIT 0x00
+	bus->ram[0x1114] = 0x00;
+	bus->ram[0x1115] = 0x03; // STORE
+	bus->ram[0x1116] = 0x01; // LIT 0x01
+	bus->ram[0x1117] = 0x01;
+	bus->ram[0x1118] = 0x01; // LIT 0x00
+	bus->ram[0x1119] = 0x00;
+	bus->ram[0x111A] = 0x03; // STORE
+	bus->ram[0x111B] = 0x11; // ADD
+	bus->ram[0x111C] = 0x01; // LIT 0x01
+	bus->ram[0x111D] = 0x01;
+	bus->ram[0x111E] = 0x01; // LIT 0x00
+	bus->ram[0x111F] = 0x00;
+	bus->ram[0x1120] = 0x04; // FETCH
+	bus->ram[0x1121] = 0x01; // LIT 0x00
+	bus->ram[0x1122] = 0x00;
+	bus->ram[0x1123] = 0x01; // LIT 0x00
+	bus->ram[0x1124] = 0x00;
+	bus->ram[0x1125] = 0x04; // FETCH
+	bus->ram[0x1126] = 0x10; // EXIT
+
+	// Run the machine.
+	while (bus->cpu.running) bus->cpu.clock();
+
+	// Check the result;
+	if (bus->read(0x2222) != 0x12) {
+		reportMismatch("Subroutine call 2", "0x12", bus->read(0x2222));
 		return false;
 	}
 
@@ -553,20 +608,25 @@ bool testXOR() {
 
 int main() {
 	bool allPass = true;
-	std::vector<Test> allTests = {
-		{ "LIT",         &testLIT         }, { "DROP",            &testDROP           },
-		{ "STORE",       &testSTORE       }, { "FETCH",           &testFETCH          },
-		{ "DUP",         &testDUP         }, { "OVER",            &testOVER           },
-		{ "SWAP",        &testSWAP        }, { "IF_branch",       &testIF_branch      },
-		{ "IF_nobranch", &testIF_nobranch }, { "CALL",            &testCALL           },
-		{ "EXIT",        &testEXIT        }, { "Subroutine call", &testSubroutineCall },
-		{ "ADD",         &testADD         }, { "SUB",             &testSUB            },
-		{ "AND",         &testAND         }, { "OR",              &testOR             },
-		{ "XOR",         &testXOR         },
+	std::vector<Test> instructionsTests = {
+		{ "LIT",         &testLIT         }, { "DROP",      &testDROP      },
+		{ "STORE",       &testSTORE       }, { "FETCH",     &testFETCH     },
+		{ "DUP",         &testDUP         }, { "OVER",      &testOVER      },
+		{ "SWAP",        &testSWAP        }, { "IF_branch", &testIF_branch },
+		{ "IF_nobranch", &testIF_nobranch }, { "CALL",      &testCALL      },
+		{ "EXIT",        &testEXIT        }, { "ADD",       &testADD       },
+		{ "SUB",         &testSUB         }, { "AND",       &testAND       },
+		{ "OR",          &testOR          }, { "XOR",       &testXOR       },
+	};
+
+	std::vector<Test> miscTests = {
+		{ "Subroutine call 1", &testSubroutineCall1 },
+		{ "Subroutine call 2", &testSubroutineCall2 },
 	};
 
 	// Execute the tests.
-	for (auto &test: allTests) allPass = runTest(test);
+	for (auto &test: instructionsTests) allPass = runTest(test);
+	for (auto &test: miscTests) allPass = runTest (test);
 
 	if (allPass) return 0;
 	return 1;

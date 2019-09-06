@@ -57,6 +57,9 @@ void Cpu::clock() {
 	case 0x14:
 		OR();
 		break;
+	case 0x15:
+		XOR();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -234,6 +237,17 @@ void Cpu::OR() {
 	sp++; uint8_t a = read(sp);
 	sp++; uint8_t b = read(sp);
 	uint8_t result = a | b;
+
+	write(sp, result); sp--;
+}
+
+// XOR
+// Perform bitwise xor with the first two elements of the stack and pushes the
+// result to the stack (operands are popped).
+void Cpu::XOR() {
+	sp++; uint8_t a = read(sp);
+	sp++; uint8_t b = read(sp);
+	uint8_t result = a ^ b;
 
 	write(sp, result); sp--;
 }

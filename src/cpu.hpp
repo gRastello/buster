@@ -45,6 +45,7 @@ private:
 	void SUB();
 	void AND();
 	void OR();
+	void XOR();
 
 #ifdef TEST
 public:

@@ -1,15 +1,15 @@
-default: stacky
+default: buster
 
-stacky: runtest build/main.o build/stacky.o build/cpu.o build/bus.o
-	g++ -o build/stacky build/main.o build/stacky.o build/cpu.o build/bus.o
+buster: runtest build/main.o build/buster.o build/cpu.o build/bus.o
+	g++ -o build/buster build/main.o build/buster.o build/cpu.o build/bus.o
 	
-build/main.o: src/main.cpp src/stacky.hpp
+build/main.o: src/main.cpp src/buster.hpp
 	mkdir -p build
 	g++ -o build/main.o -c src/main.cpp
 
-build/stacky.o: src/stacky.cpp src/stacky.hpp src/bus.hpp
+build/buster.o: src/buster.cpp src/buster.hpp src/bus.hpp
 	mkdir -p build
-	g++ -o build/stacky.o -c src/stacky.cpp
+	g++ -o build/buster.o -c src/buster.cpp
 
 build/cpu.o: src/cpu.cpp src/cpu.hpp src/bus.hpp
 	mkdir -p build
@@ -19,10 +19,10 @@ build/bus.o: src/bus.cpp src/bus.hpp src/cpu.hpp
 	mkdir -p build
 	g++ -o build/bus.o -c src/bus.cpp
 
-run: build/stacky
-	./build/stacky
+run: build/buster
+	./build/buster
 
-build/test: src/test.cpp src/stacky.cpp src/bus.cpp src/cpu.cpp
+build/test: src/test.cpp src/buster.cpp src/bus.cpp src/cpu.cpp
 	mkdir -p build
 	g++ -o build/test src/test.cpp
 

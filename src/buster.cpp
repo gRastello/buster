@@ -1,11 +1,11 @@
-#include "stacky.hpp"
+#include "buster.hpp"
 
 #include <iostream>
 
-Stacky::Stacky() { }
-Stacky::~Stacky() { }
+Buster::Buster() { }
+Buster::~Buster() { }
 
-void Stacky::run() {
+void Buster::run() {
 	while (bus.cpu.running) bus.cpu.clock();
 
 	std::cout << "The machine halted!" << std::endl;

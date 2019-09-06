@@ -3,10 +3,10 @@
 #include "bus.hpp"
 
 // The machine class. This is basically just a wrapper around the Bus class.
-class Stacky { 
+class Buster { 
 public:
-	Stacky();
-	~Stacky();
+	Buster();
+	~Buster();
 
 	// Run the machine.
 	void run();

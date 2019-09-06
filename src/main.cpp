@@ -1,12 +1,12 @@
-#include "stacky.hpp"
+#include "buster.hpp"
 
 #include <iostream>
 
 int main() {
 	// Make an instance of the stack machine.
-	Stacky stacky;
+	Buster machine;
 
-	stacky.run();
+	machine.run();
 	
 	return 0;
 }

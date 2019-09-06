@@ -1,6 +1,6 @@
 #define TEST
 
-#include "stacky.cpp"
+#include "buster.cpp"
 #include "bus.cpp"
 #include "cpu.cpp"
 
@@ -28,7 +28,7 @@ void reportMismatch(std::string testName, std::string expected, uint64_t found) 
 
 // Test the LIT instruction.
 bool testLIT() {
-	Stacky machine;
+	Buster machine;
 	Bus* bus = machine.getBusPtr();
 
 	// Initialize some ram.
@@ -61,7 +61,7 @@ bool testLIT() {
 
 // Test the DROP instruction.
 bool testDROP() {
-	Stacky machine;
+	Buster machine;
 	Bus* bus = machine.getBusPtr();
 
 	// Initialize some ram.
@@ -86,7 +86,7 @@ bool testDROP() {
 
 // Test the STORE function.
 bool testSTORE() {
-	Stacky machine;
+	Buster machine;
 	Bus* bus = machine.getBusPtr();
 
 	//Initialize some ram.
@@ -114,7 +114,7 @@ bool testSTORE() {
 
 // Test the FETCH function.
 bool testFETCH() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Populate memory.
@@ -143,7 +143,7 @@ bool testFETCH() {
 
 // Test the DUP isntruction.
 bool testDUP() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the ram.
@@ -175,7 +175,7 @@ bool testDUP() {
 
 // Test the OVER instruction.
 bool testOVER() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the ram.
@@ -215,7 +215,7 @@ bool testOVER() {
 
 // Test for the SWAP instruction.
 bool testSWAP() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize ram.
@@ -249,7 +249,7 @@ bool testSWAP() {
 
 // Test the IF instruction.
 bool testIF_branch() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the ram.
@@ -275,7 +275,7 @@ bool testIF_branch() {
 }
 
 bool testIF_nobranch() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the ram.
@@ -301,7 +301,7 @@ bool testIF_nobranch() {
 
 // Test the CALL instruction.
 bool testCALL() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Populate the RAM.
@@ -347,7 +347,7 @@ bool testCALL() {
 
 // Test the EXIT instruction.
 bool testEXIT() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.
@@ -374,7 +374,7 @@ bool testEXIT() {
 
 // Test a simple subroutine call.
 bool testSubroutineCall() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize RAM.
@@ -418,7 +418,7 @@ bool testSubroutineCall() {
 
 // Test ADD.
 bool testADD() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Populate the RAM.
@@ -445,7 +445,7 @@ bool testADD() {
 
 // Test the SUB instruction.
 bool testSUB() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.
@@ -472,7 +472,7 @@ bool testSUB() {
 
 // Test the AND instruction.
 bool testAND() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.
@@ -499,7 +499,7 @@ bool testAND() {
 
 // Test the OR instruction.
 bool testOR() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.
@@ -526,7 +526,7 @@ bool testOR() {
 
 // Test the XOR instruction.
 bool testXOR() {
-	Stacky machine;
+	Buster machine;
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.

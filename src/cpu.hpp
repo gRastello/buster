@@ -44,6 +44,7 @@ private:
 	void ADD();
 	void SUB();
 	void AND();
+	void OR();
 
 #ifdef TEST
 public:

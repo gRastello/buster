@@ -179,7 +179,5 @@ void Cpu::CALL() {
 void Cpu::EXIT() {
 	sp++; uint8_t hn = read(sp);
 	sp++; uint8_t ln = read(sp);
-	uint16_t addr = ((uint16_t)hn << 8) | (uint16_t)ln;
-
-	pc = addr;
+	pc = ((uint16_t)hn << 8) | (uint16_t)ln;
 }

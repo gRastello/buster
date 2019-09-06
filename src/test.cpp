@@ -372,15 +372,59 @@ bool testEXIT() {
 	return true;
 }
 
+// Test a simple subroutine call.
+bool testSubroutineCall() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Initialize RAM.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0xFE;
+	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0003] = 0x00;
+	bus->ram[0x0004] = 0x08; // IF
+	bus->ram[0x0005] = 0xAA;
+	bus->ram[0x0006] = 0xAA;
+
+	bus->ram[0xAAAA] = 0x09; // CALL
+	bus->ram[0xAAAB] = 0xBB;
+	bus->ram[0xAAAC] = 0xBB;
+	bus->ram[0xAAAD] = 0x00; // HALT
+
+	bus->ram[0xBBBB] = 0x01; // LIT
+	bus->ram[0xBBBC] = 0xFE;
+	bus->ram[0xBBBD] = 0x02; // DROP
+	bus->ram[0xBBBE] = 0x10; // EXIT
+
+	// Run the machine.
+	while (bus->cpu.running) bus->cpu.clock();
+
+	// Check the results.
+	uint16_t pc = bus->cpu.getPC();
+	if (pc != 0xAAAE) {
+		reportMismatch("Subroutine call", "0xAAAE", pc);
+		return false;
+	}
+
+	uint16_t sp = bus->cpu.getSP();
+	sp++;
+	if (bus->read(sp) != 0xFE) {
+		reportMismatch("Subroutine call", "0xFE", bus->read(sp));
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
-		{ "LIT",         &testLIT         }, { "DROP",      &testDROP      },
-		{ "STORE",       &testSTORE       }, { "FETCH",     &testFETCH     },
-		{ "DUP",         &testDUP         }, { "OVER",      &testOVER      },
-		{ "SWAP",        &testSWAP        }, { "IF_branch", &testIF_branch },
-		{ "IF_nobranch", &testIF_nobranch }, { "CALL",      &testCALL      },
-		{ "EXIT",        &testEXIT        },
+		{ "LIT",         &testLIT         }, { "DROP",            &testDROP           },
+		{ "STORE",       &testSTORE       }, { "FETCH",           &testFETCH          },
+		{ "DUP",         &testDUP         }, { "OVER",            &testOVER           },
+		{ "SWAP",        &testSWAP        }, { "IF_branch",       &testIF_branch      },
+		{ "IF_nobranch", &testIF_nobranch }, { "CALL",            &testCALL           },
+		{ "EXIT",        &testEXIT        }, { "Subroutine call", &testSubroutineCall },
 	};
 
 	// Execute the tests.

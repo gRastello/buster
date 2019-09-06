@@ -51,6 +51,9 @@ void Cpu::clock() {
 	case 0x12:
 		SUB();
 		break;
+	case 0x13:
+		AND();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -209,3 +212,15 @@ void Cpu::SUB() {
 
 	write(sp, result); sp--;
 }
+
+// AND
+// Perform bitwise and with the first two elements of the stack and pushes the
+// result to the stack (operands are popped).
+void Cpu::AND() {
+	sp++; uint8_t a = read(sp);
+	sp++; uint8_t b = read(sp);
+	uint8_t result = a & b;
+
+	write(sp, result); sp--;
+}
+	

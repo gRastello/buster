@@ -43,6 +43,7 @@ private:
 	void EXIT();
 	void ADD();
 	void SUB();
+	void AND();
 
 #ifdef TEST
 public:

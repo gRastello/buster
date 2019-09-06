@@ -39,6 +39,9 @@ void Cpu::clock() {
 	case 0x08:
 		IF();
 		break;
+	case 0x09:
+		CALL();
+		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
 		          << "(invoking HALT instead)" << std::endl;
@@ -147,4 +150,21 @@ void Cpu::IF() {
 	} else {
 		pc += 2;
 	}
+}
+
+// CALL
+// Pushes address of next instruction to the stack so that the higher nibble of
+// the address is the first element of the stack and the lower nibble the 
+// second. Then jumps to the address indicated by the following two bytes (again
+// the first one is the higher nibble and the second one the lower).
+void Cpu::CALL() {
+	uint8_t sp_hn = (pc + 2) >> 8;
+	uint8_t sp_ln = (pc + 2) & 0x00FF;
+	write(sp, sp_ln); sp--;
+	write(sp, sp_hn); sp--;
+
+	uint8_t addr_hn = read(pc);
+	uint8_t addr_ln = read(pc + 1);
+	uint16_t addr = ((uint16_t)addr_hn << 8) | (uint16_t)addr_ln;
+	pc = addr;
 }

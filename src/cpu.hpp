@@ -39,6 +39,7 @@ private:
 	void OVER();
 	void SWAP();
 	void IF();
+	void CALL();
 
 #ifdef TEST
 public:

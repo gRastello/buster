@@ -20,7 +20,7 @@ bool runTest(Test test) {
 	return result;
 }
 
-void reportMismatch(std::string testName, std::string expected, uint8_t found) {
+void reportMismatch(std::string testName, std::string expected, uint64_t found) {
 	std::cout << testName << ": FAILED" << std::endl;
 	std::cout << "  expected " << expected << " but found 0x" 
 	          << std::hex << unsigned(found) << std::endl;
@@ -299,6 +299,52 @@ bool testIF_nobranch() {
 	return true;
 }
 
+// Test the CALL instruction.
+bool testCALL() {
+	Stacky machine;
+	Bus *bus = machine.getBusPtr();
+
+	// Populate the RAM.
+	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0001] = 0x00;
+	bus->ram[0x0002] = 0x08; // IF
+	bus->ram[0x0003] = 0xAA;
+	bus->ram[0x0004] = 0xCC;
+
+	bus->ram[0xAACC] = 0x09; // CALL
+	bus->ram[0xAACD] = 0x11;
+	bus->ram[0xAACE] = 0x22;
+	bus->ram[0xAACF] = 0x00; // HALT (CALL return point)
+
+	bus->ram[0x1122] = 0x00; // HALT
+
+	// Run the machine.
+	while (bus->cpu.running) bus->cpu.clock();
+
+	// Check results.
+	uint16_t sp = bus->cpu.getSP();
+
+	sp++;
+	if (bus->read(sp) != 0xAA) {
+		reportMismatch("CALL", "0xAA", bus->read(sp));
+		return false;
+	}
+
+	sp++;
+	if (bus->read(sp) != 0xCF) {
+		reportMismatch("CALL", "0xCF", bus->read(sp));
+		return false;
+	}
+
+	uint16_t pc = bus->cpu.getPC();
+	if (pc != 0x1123) {
+		reportMismatch("CALL", "0x1123", pc);
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> allTests = {
@@ -306,7 +352,7 @@ int main() {
 		{ "STORE",       &testSTORE       }, { "FETCH",     &testFETCH     },
 		{ "DUP",         &testDUP         }, { "OVER",      &testOVER      },
 		{ "SWAP",        &testSWAP        }, { "IF_branch", &testIF_branch },
-		{ "IF_nobranch", &testIF_nobranch },
+		{ "IF_nobranch", &testIF_nobranch }, { "CALL",      &testCALL      },
 	};
 
 	// Execute the tests.

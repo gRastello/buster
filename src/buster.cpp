@@ -6,7 +6,7 @@
 Buster::Buster() { }
 Buster::~Buster() { }
 
-void Buster::loadProgram(char *filename) {
+void Buster::loadProgram(std::string filename) {
 	// Read file to a string.
 	std::ifstream file;
 	file.exceptions(std::ifstream::failbit);
@@ -27,8 +27,18 @@ void Buster::loadProgram(char *filename) {
 }
 
 void Buster::run() {
-	while (bus.cpu.running) bus.cpu.clock();
+	if (debugMode) bus.cpu.print();
+
+	while (bus.cpu.running) {
+		if (debugMode) {
+			std::cout << "hit enter key to run the next instruction...";
+			std::getchar();
+		}
+
+		bus.cpu.clock();
+
+		if (debugMode) bus.cpu.print();
+	}
 
 	std::cout << "The machine halted!" << std::endl;
-	std::cout << "clockCount: " << bus.cpu.clockCount << std::endl;
 }

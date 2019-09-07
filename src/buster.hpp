@@ -9,14 +9,17 @@ public:
 	~Buster();
 
 	// Load a program in memory.
-	void loadProgram(char* filename);
+	void loadProgram(std::string filename);
 
 	// Run the machine.
 	void run();
 
+	// Settings.
+	bool debugMode = true;
 private:
 	// The main bus.
 	Bus bus;
+
 
 #ifdef TEST
 public:

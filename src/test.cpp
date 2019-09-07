@@ -32,9 +32,9 @@ bool testLIT() {
 	Bus* bus = machine.getBusPtr();
 
 	// Initialize some ram.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x03;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0xFE;
 	bus->ram[0x0004] = 0x00; // HALT
 
@@ -65,9 +65,9 @@ bool testDROP() {
 	Bus* bus = machine.getBusPtr();
 
 	// Initialize some ram.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x00;
-	bus->ram[0x0002] = 0x02; // DROP
+	bus->ram[0x0002] = 0x20; // DROP
 	bus->ram[0x0004] = 0x00; // HALT
 
 	// Run the machine.
@@ -90,14 +90,14 @@ bool testSTORE() {
 	Bus* bus = machine.getBusPtr();
 
 	//Initialize some ram.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x11;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0x0E;
-	bus->ram[0x0004] = 0x01; // LIT
+	bus->ram[0x0004] = 0x40; // LIT
 	bus->ram[0x0005] = 0xA0;
 
-	bus->ram[0x0006] = 0x03; // STORE
+	bus->ram[0x0006] = 0x30; // STORE
 	bus->ram[0x0007] = 0x00; // HALT
 
 	// Run the machine.
@@ -118,11 +118,11 @@ bool testFETCH() {
 	Bus *bus = machine.getBusPtr();
 
 	// Populate memory.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0xFF;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0x01;
-	bus->ram[0x0004] = 0x04; // FETCH
+	bus->ram[0x0004] = 0x31; // FETCH
 	bus->ram[0x0005] = 0x00; // HALT
 
 	bus->ram[0x01FF] = 0x22;
@@ -147,9 +147,9 @@ bool testDUP() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the ram.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0xA3;
-	bus->ram[0x0002] = 0x05; // DUP
+	bus->ram[0x0002] = 0x21; // DUP
 	bus->ram[0x0003] = 0x00;
 
 	// Run the machine.
@@ -179,11 +179,11 @@ bool testOVER() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the ram.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0xE1;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0xE2;
-	bus->ram[0x0004] = 0x06; // OVER
+	bus->ram[0x0004] = 0x22; // OVER
 	bus->ram[0x0005] = 0x00; // HALT
 
 	// Run the machine.
@@ -219,11 +219,11 @@ bool testSWAP() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize ram.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x0F;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0xF0;
-	bus->ram[0x0004] = 0x07; // SWAP
+	bus->ram[0x0004] = 0x23; // SWAP
 	bus->ram[0x0005] = 0x00; // HALT
 
 	// Run the machine.
@@ -253,9 +253,9 @@ bool testIF_branch() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the ram.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x00;
-	bus->ram[0x0002] = 0x08; // IF
+	bus->ram[0x0002] = 0x50; // IF
 	bus->ram[0x0003] = 0x11;
 	bus->ram[0x0004] = 0x11;
 
@@ -279,9 +279,9 @@ bool testIF_nobranch() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the ram.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0xFF;
-	bus->ram[0x0002] = 0x08; // IF
+	bus->ram[0x0002] = 0x50; // IF
 	bus->ram[0x0003] = 0x11;
 	bus->ram[0x0004] = 0x11;
 	bus->ram[0x0005] = 0x00; // HALT
@@ -305,13 +305,13 @@ bool testCALL() {
 	Bus *bus = machine.getBusPtr();
 
 	// Populate the RAM.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x00;
-	bus->ram[0x0002] = 0x08; // IF
+	bus->ram[0x0002] = 0x50; // IF
 	bus->ram[0x0003] = 0xAA;
 	bus->ram[0x0004] = 0xCC;
 
-	bus->ram[0xAACC] = 0x09; // CALL
+	bus->ram[0xAACC] = 0x60; // CALL
 	bus->ram[0xAACD] = 0x11;
 	bus->ram[0xAACE] = 0x22;
 	bus->ram[0xAACF] = 0x00; // HALT (CALL return point)
@@ -351,11 +351,11 @@ bool testEXIT() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x12;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0x23;
-	bus->ram[0x0004] = 0x10; // EXIT
+	bus->ram[0x0004] = 0x61; // EXIT
 
 	bus->ram[0x2312] = 0x00; // HALT
 
@@ -378,23 +378,23 @@ bool testSubroutineCall1() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize RAM.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0xFE;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0x00;
-	bus->ram[0x0004] = 0x08; // IF
+	bus->ram[0x0004] = 0x50; // IF
 	bus->ram[0x0005] = 0xAA;
 	bus->ram[0x0006] = 0xAA;
 
-	bus->ram[0xAAAA] = 0x09; // CALL
+	bus->ram[0xAAAA] = 0x60; // CALL
 	bus->ram[0xAAAB] = 0xBB;
 	bus->ram[0xAAAC] = 0xBB;
 	bus->ram[0xAAAD] = 0x00; // HALT
 
-	bus->ram[0xBBBB] = 0x01; // LIT
+	bus->ram[0xBBBB] = 0x40; // LIT
 	bus->ram[0xBBBC] = 0xFE;
-	bus->ram[0xBBBD] = 0x02; // DROP
-	bus->ram[0xBBBE] = 0x10; // EXIT
+	bus->ram[0xBBBD] = 0x20; // DROP
+	bus->ram[0xBBBE] = 0x61; // EXIT
 
 	// Run the machine.
 	while (bus->cpu.running) bus->cpu.clock();
@@ -422,42 +422,42 @@ bool testSubroutineCall2() {
 	Bus *bus = machine.getBusPtr();
 
 	// Populate the RAM.
-	bus->ram[0x0000] = 0x01; // LIT 0x0F
+	bus->ram[0x0000] = 0x40; // LIT 0x0F
 	bus->ram[0x0001] = 0x0F;
-	bus->ram[0x0002] = 0x01; // LIT 0x03
+	bus->ram[0x0002] = 0x40; // LIT 0x03
 	bus->ram[0x0003] = 0x03;
-	bus->ram[0x0004] = 0x09; // CALL 0x1111
+	bus->ram[0x0004] = 0x60; // CALL 0x1111
 	bus->ram[0x0005] = 0x11;
 	bus->ram[0x0006] = 0x11;
-	bus->ram[0x0007] = 0x01; // LIT 0x22
+	bus->ram[0x0007] = 0x40; // LIT 0x22
 	bus->ram[0x0008] = 0x22;
-	bus->ram[0x0009] = 0x01; // LIT 0x22
+	bus->ram[0x0009] = 0x40; // LIT 0x22
 	bus->ram[0x000A] = 0x22;
-	bus->ram[0x000B] = 0x03; // STORE
+	bus->ram[0x000B] = 0x30; // STORE
 	bus->ram[0x000C] = 0x00; // HALT
 
-	bus->ram[0x1111] = 0x01; // LIT 0x00
+	bus->ram[0x1111] = 0x40; // LIT 0x00
 	bus->ram[0x1112] = 0x00;
-	bus->ram[0x1113] = 0x01; // LIT 0x00
+	bus->ram[0x1113] = 0x40; // LIT 0x00
 	bus->ram[0x1114] = 0x00;
-	bus->ram[0x1115] = 0x03; // STORE
-	bus->ram[0x1116] = 0x01; // LIT 0x01
+	bus->ram[0x1115] = 0x30; // STORE
+	bus->ram[0x1116] = 0x40; // LIT 0x01
 	bus->ram[0x1117] = 0x01;
-	bus->ram[0x1118] = 0x01; // LIT 0x00
+	bus->ram[0x1118] = 0x40; // LIT 0x00
 	bus->ram[0x1119] = 0x00;
-	bus->ram[0x111A] = 0x03; // STORE
-	bus->ram[0x111B] = 0x11; // ADD
-	bus->ram[0x111C] = 0x01; // LIT 0x01
+	bus->ram[0x111A] = 0x30; // STORE
+	bus->ram[0x111B] = 0x10; // ADD
+	bus->ram[0x111C] = 0x40; // LIT 0x01
 	bus->ram[0x111D] = 0x01;
-	bus->ram[0x111E] = 0x01; // LIT 0x00
+	bus->ram[0x111E] = 0x40; // LIT 0x00
 	bus->ram[0x111F] = 0x00;
-	bus->ram[0x1120] = 0x04; // FETCH
-	bus->ram[0x1121] = 0x01; // LIT 0x00
+	bus->ram[0x1120] = 0x31; // FETCH
+	bus->ram[0x1121] = 0x40; // LIT 0x00
 	bus->ram[0x1122] = 0x00;
-	bus->ram[0x1123] = 0x01; // LIT 0x00
+	bus->ram[0x1123] = 0x40; // LIT 0x00
 	bus->ram[0x1124] = 0x00;
-	bus->ram[0x1125] = 0x04; // FETCH
-	bus->ram[0x1126] = 0x10; // EXIT
+	bus->ram[0x1125] = 0x31; // FETCH
+	bus->ram[0x1126] = 0x61; // EXIT
 
 	// Run the machine.
 	while (bus->cpu.running) bus->cpu.clock();
@@ -477,11 +477,11 @@ bool testADD() {
 	Bus *bus = machine.getBusPtr();
 
 	// Populate the RAM.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x0F;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0x03;
-	bus->ram[0x0004] = 0x11; // ADD
+	bus->ram[0x0004] = 0x10; // ADD
 	bus->ram[0x0005] = 0x00; // HALT
 
 	// Run the machine.
@@ -504,11 +504,11 @@ bool testSUB() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x0F;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0x09;
-	bus->ram[0x0004] = 0x12; // SUB
+	bus->ram[0x0004] = 0x11; // SUB
 	bus->ram[0x0005] = 0x00; // HALT
 
 	// Run the machine.
@@ -531,11 +531,11 @@ bool testAND() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x0F;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0x81;
-	bus->ram[0x0004] = 0x13; // AND
+	bus->ram[0x0004] = 0x12; // AND
 	bus->ram[0x0005] = 0x00; // HALT
 
 	// Run the machine.
@@ -558,11 +558,11 @@ bool testOR() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x0F;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0x81;
-	bus->ram[0x0004] = 0x14; // OR
+	bus->ram[0x0004] = 0x13; // OR
 	bus->ram[0x0005] = 0x00; // HALT
 
 	// Run the machine.
@@ -585,11 +585,11 @@ bool testXOR() {
 	Bus *bus = machine.getBusPtr();
 
 	// Initialize the RAM.
-	bus->ram[0x0000] = 0x01; // LIT
+	bus->ram[0x0000] = 0x40; // LIT
 	bus->ram[0x0001] = 0x0F;
-	bus->ram[0x0002] = 0x01; // LIT
+	bus->ram[0x0002] = 0x40; // LIT
 	bus->ram[0x0003] = 0x81;
-	bus->ram[0x0004] = 0x15; // XOR
+	bus->ram[0x0004] = 0x14; // XOR
 	bus->ram[0x0005] = 0x00; // HALT
 
 	// Run the machine.

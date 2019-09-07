@@ -31,21 +31,12 @@ private:
 
 	// Instructions.
 	void HALT();
+	void ADD();   void SUB(); void AND();  void OR(); void XOR();
+	void DROP();  void DUP(); void OVER(); void SWAP();
+	void STORE(); void FETCH();
 	void LIT();
-	void DROP();
-	void STORE();
-	void FETCH();
-	void DUP();
-	void OVER();
-	void SWAP();
 	void IF();
-	void CALL();
-	void EXIT();
-	void ADD();
-	void SUB();
-	void AND();
-	void OR();
-	void XOR();
+	void CALL();  void EXIT();
 
 #ifdef TEST
 public:

@@ -15,50 +15,50 @@ void Cpu::clock() {
 	case 0x00:
 		HALT();
 		break;
-	case 0x01:
-		LIT();
-		break;
-	case 0x02:
-		DROP();
-		break;
-	case 0x03:
-		STORE();
-		break;
-	case 0x04:
-		FETCH();
-		break;
-	case 0x05:
-		DUP();
-		break;
-	case 0x06:
-		OVER();
-		break;
-	case 0x07:
-		SWAP();
-		break;
-	case 0x08:
-		IF();
-		break;
-	case 0x09:
-		CALL();
-		break;
 	case 0x10:
-		EXIT();
-		break;
-	case 0x11:
 		ADD();
 		break;
-	case 0x12:
+	case 0x11:
 		SUB();
 		break;
-	case 0x13:
+	case 0x12:
 		AND();
 		break;
-	case 0x14:
+	case 0x13:
 		OR();
 		break;
-	case 0x15:
+	case 0x14:
 		XOR();
+		break;
+	case 0x20:
+		DROP();
+		break;
+	case 0x21:
+		DUP();
+		break;
+	case 0x22:
+		OVER();
+		break;
+	case 0x23:
+		SWAP();
+		break;
+	case 0x30:
+		STORE();
+		break;
+	case 0x31:
+		FETCH();
+		break;
+	case 0x40:
+		LIT();
+		break;
+	case 0x50:
+		IF();
+		break;
+	case 0x60:
+		CALL();
+		break;
+	case 0x61:
+		EXIT();
 		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)

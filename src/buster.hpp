@@ -8,6 +8,9 @@ public:
 	Buster();
 	~Buster();
 
+	// Load a program in memory.
+	void loadProgram(char* filename);
+
 	// Run the machine.
 	void run();
 

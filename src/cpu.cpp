@@ -62,7 +62,7 @@ void Cpu::clock() {
 		break;
 	default: // We default to the HALT instruction.
 		std::cout << "invalid opcode: 0x" << std::hex << unsigned(opcode)
-		          << "(invoking HALT instead)" << std::endl;
+		          << " (invoking HALT instead)" << std::endl;
 		HALT();
 		break;
 	}

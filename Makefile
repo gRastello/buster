@@ -28,3 +28,7 @@ build/test: src/test.cpp src/buster.cpp src/bus.cpp src/cpu.cpp
 
 runtest: build/test
 	./build/test
+
+build/nono/token.o: src/nono/token.hpp src/nono/token.cpp
+	mkdir -p build/nono
+	g++ -o build/nono/token.o -c src/nono/token.cpp

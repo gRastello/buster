@@ -5,18 +5,12 @@
 #include <string>
 #include <vector>
 
-int main(int argn, char *argv[]) {
-	bool debugMode = false;
-	std::vector<uint16_t> watchedCells;
-
-	// Store relevant arguments in a vector.
-	std::vector<std::string> arguments;
-	uint64_t i;
-	for (i = 1; i < argn; i++) arguments.push_back(argv[i]);
-
-	// Handle flags.
+void parseFlags(bool &debugMode,
+                std::vector<uint16_t> &watchedCells,
+				std::vector<std::string> &arguments) {
 	std::vector<std::string>::iterator it;
 
+	// `--debug` flag.
 	while (true) {
 		it = std::find(arguments.begin(), arguments.end(), "--debug");
 		if (it != arguments.end()) {
@@ -27,6 +21,7 @@ int main(int argn, char *argv[]) {
 		}
 	}
 
+	// `--watch` flag.
 	while (true) {
 		it = std::find(arguments.begin(), arguments.end(), "--watch");
 		if (it < arguments.end() - 1) {
@@ -43,6 +38,19 @@ int main(int argn, char *argv[]) {
 			break;
 		}
 	}
+}
+
+int main(int argn, char *argv[]) {
+	bool debugMode = false;
+	std::vector<uint16_t> watchedCells;
+
+	// Store relevant arguments in a vector.
+	std::vector<std::string> arguments;
+	uint64_t i;
+	for (i = 1; i < argn; i++) arguments.push_back(argv[i]);
+
+	// Handle flags.
+	parseFlags(debugMode, watchedCells, arguments);
 	
 	// Check the number of arguments.
 	if (arguments.size() != 1) {

@@ -1,6 +1,7 @@
 #include "bus.hpp"
 #include "cpu.hpp"
 
+#include <iomanip>
 #include <iostream>
 
 Cpu::Cpu() { }
@@ -79,10 +80,11 @@ void Cpu::print() {
 	std::cout << "* stack: [";
 
 	uint16_t stackPtr = sp;
-	while (stackPtr < 0xFFFF) {
+	while (stackPtr != 0xFFFF) {
 		stackPtr++;
 		uint8_t value = read(stackPtr);
-		std::cout << "0x" << std::hex << unsigned(value);
+		std::cout << "0x" << std::setw(2) << std::setfill('0') 
+		          << std::hex << unsigned(value);
 
 		if (stackPtr != 0xFFFF) std::cout << ", ";
 	}

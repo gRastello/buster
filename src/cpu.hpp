@@ -16,11 +16,11 @@ public:
 	void clock();
 	uint64_t clockCount = 0;
 
-	// Print the current status of the CPU to stdout.
-	void print();
-
 	// Connect to the bus.
 	void connectToBus(Bus *x) { bus = x; }
+
+	// Print the cpu.
+	void print();
 
 private:
 	// Registers.

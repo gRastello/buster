@@ -26,8 +26,13 @@ void Buster::loadProgram(std::string filename) {
 	for (i = 0; i < str.length(); i++) bus.ram[i] = str[i];
 }
 
+void Buster::print() {
+	bus.cpu.print();
+	if (!watchedCells.empty()) bus.print(watchedCells);
+}
+
 void Buster::run() {
-	if (debugMode) bus.cpu.print();
+	if (debugMode) print();
 
 	while (bus.cpu.running) {
 		if (debugMode) {
@@ -37,7 +42,7 @@ void Buster::run() {
 
 		bus.cpu.clock();
 
-		if (debugMode) bus.cpu.print();
+		if (debugMode) print();
 	}
 
 	std::cout << "The machine halted!" << std::endl;

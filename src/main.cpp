@@ -15,10 +15,15 @@ int main(int argn, char *argv[]) {
 
 	// Handle flags.
 	std::vector<std::string>::iterator it;
-	it = std::find(arguments.begin(), arguments.end(), "--debug");
-	if (it != arguments.end()) {
-		debugMode = true;
-		arguments.erase(it);
+
+	while (true) {
+		it = std::find(arguments.begin(), arguments.end(), "--debug");
+		if (it != arguments.end()) {
+			debugMode = true;
+			arguments.erase(it);
+		} else {
+			break;
+		}
 	}
 	
 	// Check the number of arguments.

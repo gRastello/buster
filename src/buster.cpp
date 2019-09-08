@@ -28,21 +28,22 @@ void Buster::loadProgram(std::string filename) {
 
 void Buster::print() {
 	bus.cpu.print();
-	if (!watchedCells.empty()) bus.print(watchedCells);
+	if (!settings.watchedCells.empty()) 
+		bus.print(settings.watchedCells);
 }
 
 void Buster::run() {
-	if (debugMode) print();
+	if (settings.debugMode) print();
 
 	while (bus.cpu.running) {
-		if (debugMode) {
+		if (settings.debugMode) {
 			std::cout << "hit enter key to run the next instruction...";
 			std::getchar();
 		}
 
 		bus.cpu.clock();
 
-		if (debugMode) print();
+		if (settings.debugMode) print();
 	}
 
 	std::cout << "The machine halted!" << std::endl;

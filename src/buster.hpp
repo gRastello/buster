@@ -20,8 +20,11 @@ public:
 	void print();
 
 	// Settings.
-	bool debugMode = true;
-	std::vector<uint16_t> watchedCells;
+	struct Settings {
+		bool                  debugMode = false;
+		std::vector<uint16_t> watchedCells;
+	};
+	Settings settings;
 
 private:
 	// The main bus.

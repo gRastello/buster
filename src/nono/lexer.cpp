@@ -34,6 +34,7 @@ void Lexer::scanToken() {
 	source++;
 
 	// Parse a token or discard whitespace/comments.
+	
 	if (c == '\n') {
 		line++;
 		return;
@@ -45,8 +46,59 @@ void Lexer::scanToken() {
 		addToken(Token::Type::COLON);
 		return;
 	}
+
+	if (c == '0') finishNumber();
+}
+
+void Lexer::finishNumber() {
+	if (source == sourceEnd) {
+		LexingError error(line, "unexpected EOF");
+		throw error;
+	}
+
+	char c = *source;
+	source++;
+
+	if (c == 'x') {
+		std::string::iterator digitsStart = source;
+
+		// Get all the remaining digits.
+		while (source != sourceEnd) {
+			c = *source;
+			source++;
+
+			if (!isHexDigit(c)) {
+				source--;
+				break;
+			}
+		}
+
+		// Throw if we got no digits.
+		if (source == digitsStart) {
+			LexingError error(line, "expected digits after 'x'");
+			throw error;
+		}
+
+		addToken(Token::Type::NUMBER);
+	} else {
+		LexingError error(line, "expected 'x' after '0'");
+		throw error;
+	}
 }
 
 bool Lexer::isWhitespace(char c) {
 	return c == ' ' || c == '\r' || c == '\t';
 }
+
+bool Lexer::isHexDigit(char c) {
+	return (c >= 48 && c <= 57) ||
+	       (c >= 65 && c <= 70) ||
+		   (c >= 97 && c <= 102);
+}
+
+LexingError::LexingError(uint64_t _line, std::string _message) {
+	line    = _line;
+	message = _message;
+}
+
+LexingError::~LexingError() { }

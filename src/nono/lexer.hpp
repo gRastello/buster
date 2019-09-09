@@ -30,12 +30,26 @@ private:
 
 	// Scan a single token.
 	void scanToken();
+	void finishNumber();
 
 	// Check if `c` is whitespace.
 	static bool isWhitespace(char c);
+	static bool isHexDigit(char c);
 
 #ifdef TEST
 public:
 	int64_t getLine() { return line; }
 #endif
+};
+
+class LexingError {
+public:
+	LexingError(uint64_t _line, std::string _message);
+	~LexingError();
+
+private:
+	// Line of the problematic token.
+	uint64_t line;
+	// Error message.
+	std::string message;
 };

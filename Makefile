@@ -1,3 +1,5 @@
+# buster targets
+
 default: buster
 
 buster: runtest build/main.o build/buster.o build/cpu.o build/bus.o
@@ -29,6 +31,16 @@ build/test: src/test.cpp src/buster.cpp src/bus.cpp src/cpu.cpp
 runtest: build/test
 	./build/test
 
-build/nono/token.o: src/nono/token.hpp src/nono/token.cpp
+# nonon targets
+
+build/nono/token.o: src/nono/token.cpp src/nono/token.hpp
 	mkdir -p build/nono
 	g++ -o build/nono/token.o -c src/nono/token.cpp
+
+build/nono/lexer.o: src/nono/lexer.cpp src/nono/lexer.hpp src/nono/token.hpp
+	mkdir -p build/nono
+	g++ -o build/nono/lexer.o -c src/nono/lexer.cpp
+
+build/nono/test: src/nono/test.cpp src/nono/token.cpp src/nono/lexer.cpp src/nono/token.hpp
+	mkdir -p build/nono
+	g++ -o build/nono/test src/nono/test.cpp

@@ -38,4 +38,11 @@ void Lexer::scanToken() {
 		line++;
 		return;
 	}
+
+	if (Lexer::isWhitespace(c)) return;
+
+}
+
+bool Lexer::isWhitespace(char c) {
+	return c == ' ' || c == '\r' || c == '\t';
 }

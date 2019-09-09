@@ -31,6 +31,9 @@ private:
 	// Scan a single token.
 	void scanToken();
 
+	// Check if `c` is whitespace.
+	static bool isWhitespace(char c);
+
 #ifdef TEST
 public:
 	int64_t getLine() { return line; }

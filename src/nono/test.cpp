@@ -34,7 +34,7 @@ void reportMismatch(std::string testName,
 
 // Whitespace skipping lexing test.
 bool testLexerWhitespace() {
-	std::string source = "\n\n\n";
+	std::string source = "\n   \t\t  \r\n  \r\r\t  \n   \t";
 	Lexer lexer(source);
 
 	lexer.scan();

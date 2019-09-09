@@ -30,10 +30,10 @@ void Lexer::addToken(Token::Type type) {
 }
 
 void Lexer::scanToken() {
-
 	char c = *source;
 	source++;
 
+	// Parse a token or discard whitespace/comments.
 	if (c == '\n') {
 		line++;
 		return;
@@ -41,6 +41,10 @@ void Lexer::scanToken() {
 
 	if (Lexer::isWhitespace(c)) return;
 
+	if (c == ':') {
+		addToken(Token::Type::COLON);
+		return;
+	}
 }
 
 bool Lexer::isWhitespace(char c) {

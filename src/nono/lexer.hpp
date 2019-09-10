@@ -30,6 +30,7 @@ private:
 
 	// Scan a single token.
 	void scanToken();
+	void finishComment();
 	void finishNumber();
 
 	// Check if `c` is whitespace.

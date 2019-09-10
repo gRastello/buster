@@ -177,9 +177,39 @@ bool testLexerNumbersExceptions() {
 	return true;
 } 
 
+// Test comment skipping.
+bool testLexerComments() {
+	std::string source = "; foo bar baz\n;bar bar";
+	Lexer lexer(source);
+
+	try {
+		lexer.scan();
+	} catch (LexingError &error) {
+		std::cout << "Scan failed! Exception encountered!" << std::endl;
+		return false;
+	}
+
+	// Check results.
+	if (lexer.tokens.size() != 1) {
+		reportMismatch("Lexer comments", "1", lexer.tokens.size());
+		return false;
+	}
+
+	std::string lexeme = "";
+	Token t(Token::Type::END, lexeme, 2);
+	if (lexer.tokens[0] != t) {
+		reportMismatch("Lexer comments",
+		               t.toString(),
+					   lexer.tokens[0].toString());
+		return false;
+	}
+
+	return true;
+}
+	
 // Lexer mixed (real worldish) test.
 bool testLexerMixed() {
-	std::string source = "0xFF01 : 0x123c\n\t :";
+	std::string source = "0xFF01 : 0x123c; this is a comment\n\t :";
 	Lexer lexer(source);
 
 	try {
@@ -233,15 +263,16 @@ bool testLexerMixed() {
 
 	return true;
 }
-	
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> lexerTests = {
-		{ "Lexer whitespace",            &testLexerWhitespace           },
-		{ "Lexer colon",                 &testLexerColon                },
-		{ "Lexer numbers",               &testLexerNumbers              },
-		{ "Lexer numbers exceptions",    &testLexerNumbersExceptions    },
-		{ "Lexer mixed",                 &testLexerMixed                },
+		{ "Lexer whitespace",         &testLexerWhitespace        },
+		{ "Lexer colon",              &testLexerColon             },
+		{ "Lexer numbers",            &testLexerNumbers           },
+		{ "Lexer numbers exceptions", &testLexerNumbersExceptions },
+		{ "Lexer comments",           &testLexerComments          },
+		{ "Lexer mixed",              &testLexerMixed             },
 	};
 
 	for (auto &test: lexerTests) allPass = runTest(test);

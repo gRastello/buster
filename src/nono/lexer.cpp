@@ -42,12 +42,24 @@ void Lexer::scanToken() {
 
 	if (Lexer::isWhitespace(c)) return;
 
+	if (c == ';') {
+		finishComment();
+		return;
+	}
+
 	if (c == ':') {
 		addToken(Token::Type::COLON);
 		return;
 	}
 
-	if (c == '0') finishNumber();
+	if (c == '0') {
+		finishNumber();
+		return;
+	}
+}
+
+void Lexer::finishComment() {
+	while ( *source != '\n' && (source != sourceEnd)) source++;
 }
 
 void Lexer::finishNumber() {

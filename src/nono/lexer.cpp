@@ -33,33 +33,49 @@ void Lexer::scanToken() {
 	char c = *source;
 	source++;
 
-	// Parse a token or discard whitespace/comments.
-	
+	// Discard newlines.
 	if (c == '\n') {
 		line++;
 		return;
 	}
 
+	// Discard whitespace.
 	if (Lexer::isWhitespace(c)) return;
 
+	// Discard comments.
 	if (c == ';') {
 		finishComment();
 		return;
 	}
 
+	// Tokenize ':'.
 	if (c == ':') {
 		addToken(Token::Type::COLON);
 		return;
 	}
 
+	// Tokenize a number.
 	if (c == '0') {
 		finishNumber();
 		return;
 	}
+
+	// Tokenize an instruction or identifier.
+	if (isAlphanumeric(c)) {
+		finishInstructionOrIdentifier();
+		return;
+	}
+
+	// Throw exception for unexpected character.
+	std::string message = "unexpected character '";
+	message += c;
+	message += '\'';
+	LexingError error(line, message);
+	throw error;
 }
 
 void Lexer::finishComment() {
-	while ( *source != '\n' && (source != sourceEnd)) source++;
+	while (*source != '\n' && (source != sourceEnd)) source++;
 }
 
 void Lexer::finishNumber() {
@@ -98,6 +114,20 @@ void Lexer::finishNumber() {
 	}
 }
 
+void Lexer::finishInstructionOrIdentifier() {
+	std::string::iterator lexemeStart = source - 1;
+	while (isAlphanumeric(*source)) source++;
+
+	std::string lexeme(lexemeStart, source);
+	std::unordered_set<std::string>::iterator got = reservedWords.find(lexeme);
+	if (got == reservedWords.end()) {
+		addToken(Token::Type::IDENTIFIER);
+	} else {
+		addToken(Token::Type::INSTRUCTION);
+	}
+}
+
+
 bool Lexer::isWhitespace(char c) {
 	return c == ' ' || c == '\r' || c == '\t';
 }
@@ -106,6 +136,12 @@ bool Lexer::isHexDigit(char c) {
 	return (c >= 48 && c <= 57) ||
 	       (c >= 65 && c <= 70) ||
 		   (c >= 97 && c <= 102);
+}
+
+bool Lexer::isAlphanumeric(char c) {
+	return (c >= 48 && c <= 57) ||
+		   (c >= 64 && c <= 90) ||
+		   (c >= 97 && c <= 122);
 }
 
 LexingError::LexingError(uint64_t _line, std::string _message) {

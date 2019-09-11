@@ -206,6 +206,47 @@ bool testLexerComments() {
 
 	return true;
 }
+
+// Test instructions and identifiers lexing.
+bool testLexerInstructionsIdentifiers() {
+	std::string source = "CALL identifier";
+	Lexer lexer(source);
+
+	try {
+		lexer.scan();
+	} catch (LexingError &error) {
+		std::cout << "Scan failed! Exception encountered!" << std::endl;
+		return false;
+	}
+
+	// Check results.
+	if (lexer.tokens.size() != 3) {
+		reportMismatch("Lexer instructions and identifiers", 
+					   "3",
+					   lexer.tokens.size());
+		return false;
+	}
+
+	std::string lexeme = "CALL";
+	Token t(Token::Type::INSTRUCTION, lexeme, 1);
+	if (lexer.tokens[0] != t) {
+		reportMismatch("Lexer instruction and identifiers",
+					   t.toString(),
+					   lexer.tokens[0].toString());
+		return false;
+	}
+
+	lexeme = "identifier";
+	t = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	if (lexer.tokens[1] != t) {
+		reportMismatch("Lexer instruction and identifiers",
+					   t.toString(),
+					   lexer.tokens[1].toString());
+		return false;
+	}
+
+	return true;
+}
 	
 // Lexer mixed (real worldish) test.
 bool testLexerMixed() {
@@ -267,12 +308,13 @@ bool testLexerMixed() {
 int main() {
 	bool allPass = true;
 	std::vector<Test> lexerTests = {
-		{ "Lexer whitespace",         &testLexerWhitespace        },
-		{ "Lexer colon",              &testLexerColon             },
-		{ "Lexer numbers",            &testLexerNumbers           },
-		{ "Lexer numbers exceptions", &testLexerNumbersExceptions },
-		{ "Lexer comments",           &testLexerComments          },
-		{ "Lexer mixed",              &testLexerMixed             },
+		{ "Lexer whitespace",                   &testLexerWhitespace              },
+		{ "Lexer colon",                        &testLexerColon                   },
+		{ "Lexer numbers",                      &testLexerNumbers                 },
+		{ "Lexer numbers exceptions",           &testLexerNumbersExceptions       },
+		{ "Lexer comments",                     &testLexerComments                },      
+		{ "Lexer instructions and identifiers", &testLexerInstructionsIdentifiers },
+		{ "Lexer mixed",                        &testLexerMixed                   },
 	};
 
 	for (auto &test: lexerTests) allPass = runTest(test);

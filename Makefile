@@ -24,14 +24,15 @@ build/bus.o: src/bus.cpp src/bus.hpp src/cpu.hpp
 run: build/buster
 	./build/buster
 
-build/test: src/test.cpp src/buster.cpp src/bus.cpp src/cpu.cpp
+build/test: src/test.cpp src/buster.cpp src/bus.cpp src/cpu.cpp\
+			src/buster.hpp src/bus.hpp src/cpu.hpp
 	mkdir -p build
 	g++ -o build/test src/test.cpp
 
 runtest: build/test
 	./build/test
 
-# nonon targets
+# nono targets
 
 build/nono/token.o: src/nono/token.cpp src/nono/token.hpp
 	mkdir -p build/nono
@@ -41,6 +42,7 @@ build/nono/lexer.o: src/nono/lexer.cpp src/nono/lexer.hpp src/nono/token.hpp
 	mkdir -p build/nono
 	g++ -o build/nono/lexer.o -c src/nono/lexer.cpp
 
-build/nono/test: src/nono/test.cpp src/nono/token.cpp src/nono/lexer.cpp src/nono/token.hpp
+build/nono/test: src/nono/test.cpp src/nono/token.cpp src/nono/lexer.cpp\
+				 src/nono/token.hpp src/nono/lexer.hpp
 	mkdir -p build/nono
 	g++ -o build/nono/test src/nono/test.cpp

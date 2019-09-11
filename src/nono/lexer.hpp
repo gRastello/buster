@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 class Lexer {
 public:
@@ -25,6 +26,14 @@ private:
 	// Current line.
 	uint64_t line = 1;
 
+	// Reserved words.
+	std::unordered_set<std::string> reservedWords = {
+		"HALT", "ADD",  "SUB",   "AND",
+		"OR",   "XOR",  "DROP",  "DUP",
+		"OVER", "SWAP", "STORE", "FETCH",
+		"LIT",  "IF",   "CALL",  "EXIT",
+	};
+
 	// Add a new token of the given type to the `tokens` vector.
 	void addToken(Token::Type type);
 
@@ -32,10 +41,12 @@ private:
 	void scanToken();
 	void finishComment();
 	void finishNumber();
+	void finishInstructionOrIdentifier();
 
-	// Check if `c` is whitespace.
+	// Helper predicates.
 	static bool isWhitespace(char c);
 	static bool isHexDigit(char c);
+	static bool isAlphanumeric(char c);
 
 #ifdef TEST
 public:

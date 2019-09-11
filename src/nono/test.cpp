@@ -250,7 +250,7 @@ bool testLexerInstructionsIdentifiers() {
 	
 // Lexer mixed (real worldish) test.
 bool testLexerMixed() {
-	std::string source = "0xFF01 : 0x123c; this is a comment\n\t :";
+	std::string source = "foobar: 0x123c; this is a comment\n\tADD :";
 	Lexer lexer(source);
 
 	try {
@@ -261,13 +261,13 @@ bool testLexerMixed() {
 	}
 
 	// Check results.
-	if (lexer.tokens.size() != 5) {
+	if (lexer.tokens.size() != 6) {
 		reportMismatch("Lexer mixed", "5", lexer.tokens.size());
 		return false;
 	}
 
-	std::string lexeme = "0xFF01";
-	Token t(Token::Type::NUMBER, lexeme, 1);
+	std::string lexeme = "foobar";
+	Token t(Token::Type::IDENTIFIER, lexeme, 1);
 	if (lexer.tokens[0] != t) {
 		reportMismatch("Lexer mixed",
 		               t.toString(),
@@ -293,12 +293,21 @@ bool testLexerMixed() {
 		return false;
 	}
 
-	lexeme = ":";
-	t = Token(Token::Type::COLON, lexeme, 2);
+	lexeme = "ADD";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 2);
 	if (lexer.tokens[3] != t) {
 		reportMismatch("Lexer mixed",
 		               t.toString(),
 					   lexer.tokens[3].toString());
+		return false;
+	}
+
+	lexeme = ":";
+	t = Token(Token::Type::COLON, lexeme, 2);
+	if (lexer.tokens[4] != t) {
+		reportMismatch("Lexer mixed",
+		               t.toString(),
+					   lexer.tokens[4].toString());
 		return false;
 	}
 

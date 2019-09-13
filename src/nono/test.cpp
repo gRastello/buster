@@ -327,32 +327,32 @@ bool testParserNoOperator() {
 	lexeme = "HALT";
 	Token t(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 
 	lexeme = "ADD";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 	
 	lexeme = "SUB";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 	
 	lexeme = "OR";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 	
 	lexeme = "XOR";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 	
 	lexeme = "DROP";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 
 	lexeme = "foo";
 	t = Token(Token::Type::IDENTIFIER, lexeme, 1);
@@ -365,12 +365,12 @@ bool testParserNoOperator() {
 	lexeme = "DUP";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("foo", t));
+	results.push_back(std::make_shared<NoOperandStmt>("foo", t));
 	
 	lexeme = "OVER";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 
 	lexeme = "label";
 	t = Token(Token::Type::IDENTIFIER, lexeme, 1);
@@ -383,22 +383,22 @@ bool testParserNoOperator() {
 	lexeme = "SWAP";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("label", t));
+	results.push_back(std::make_shared<NoOperandStmt>("label", t));
 	
 	lexeme = "STORE";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 	
 	lexeme = "FETCH";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 	
 	lexeme = "EXIT";
 	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
 	tokens.push_back(t);
-	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	results.push_back(std::make_shared<NoOperandStmt>("", t));
 	
 	// Parse.
 	Parser parser(tokens);
@@ -417,16 +417,16 @@ bool testParserNoOperator() {
 
 	for(int i = 0; i < results.size(); i++) {
 		// Specialize pointer for parsed statements.
-		std::shared_ptr<NooperatorStmt> parsed_noop =
-			std::dynamic_pointer_cast<NooperatorStmt>(parser.statements[i]);
+		std::shared_ptr<NoOperandStmt> parsed_noop =
+			std::dynamic_pointer_cast<NoOperandStmt>(parser.statements[i]);
 		std::shared_ptr<ImmediateStmt> parsed_immop =
 			std::dynamic_pointer_cast<ImmediateStmt>(parser.statements[i]);
 		std::shared_ptr<LabelStmt> parsed_labelop =
 			std::dynamic_pointer_cast<LabelStmt>(parser.statements[i]);
 
 		// Specialize pointer for correct results.
-		std::shared_ptr<NooperatorStmt> result_noop =
-			std::dynamic_pointer_cast<NooperatorStmt>(results[i]);
+		std::shared_ptr<NoOperandStmt> result_noop =
+			std::dynamic_pointer_cast<NoOperandStmt>(results[i]);
 		std::shared_ptr<ImmediateStmt> result_immop =
 			std::dynamic_pointer_cast<ImmediateStmt>(results[i]);
 		std::shared_ptr<LabelStmt> result_labelop =

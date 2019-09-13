@@ -25,7 +25,7 @@ void Parser::statement() {
 }
 
 void Parser::noOperator(std::string label) {
-	statements.push_back(std::make_shared<NooperatorStmt>(label, *tokenStream));
+	statements.push_back(std::make_shared<NoOperandStmt>(label, *tokenStream));
 	tokenStream++;
 }
 

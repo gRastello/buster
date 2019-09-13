@@ -86,10 +86,10 @@ public:
 #endif
 };
 
-class NooperatorStmt : public Statement {
+class NoOperandStmt : public Statement {
 public:
-	NooperatorStmt(std::string label, Token token);
-	~NooperatorStmt();
+	NoOperandStmt(std::string label, Token token);
+	~NoOperandStmt();
 
 #ifdef TEST
 public:

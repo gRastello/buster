@@ -87,18 +87,18 @@ Statement::Statement(std::string _label, Token token) {
 	}
 }
 
-NooperatorStmt::NooperatorStmt(std::string label, Token token) 
+NoOperandStmt::NoOperandStmt(std::string label, Token token) 
 	: Statement(label, token) { }
 
-NooperatorStmt::~NooperatorStmt() { }
+NoOperandStmt::~NoOperandStmt() { }
 
 #ifdef TEST
-bool operator==(NooperatorStmt &lhs, NooperatorStmt &rhs) {
+bool operator==(NoOperandStmt &lhs, NoOperandStmt &rhs) {
 	return lhs.instruction == rhs.instruction &&
 	       lhs.label == rhs.label;
 }
 
-bool operator!=(NooperatorStmt &lhs, NooperatorStmt &rhs) {
+bool operator!=(NoOperandStmt &lhs, NoOperandStmt &rhs) {
 	return !(lhs == rhs);
 }
 #endif

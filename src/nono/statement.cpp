@@ -87,13 +87,52 @@ Statement::Statement(std::string _label, Token token) {
 	}
 }
 
-Statement::~Statement() { }
-
 NooperatorStmt::NooperatorStmt(std::string label, Token token) 
 	: Statement(label, token) { }
 
 NooperatorStmt::~NooperatorStmt() { }
 
-LabelStmt::LabelStmt() { }
+#ifdef TEST
+bool operator==(NooperatorStmt &lhs, NooperatorStmt &rhs) {
+	return lhs.instruction == rhs.instruction &&
+	       lhs.label == rhs.label;
+}
+
+bool operator!=(NooperatorStmt &lhs, NooperatorStmt &rhs) {
+	return !(lhs == rhs);
+}
+#endif
+
+ImmediateStmt::ImmediateStmt(std::string label, Token token)
+	: Statement(label, token) { }
+
+ImmediateStmt::~ImmediateStmt() { }
+
+#ifdef TEST
+bool operator==(ImmediateStmt &lhs, ImmediateStmt &rhs) {
+	return lhs.instruction == rhs.instruction &&
+	       lhs.label == rhs.label &&
+		   lhs.operand == rhs.operand;
+}
+
+bool operator!=(ImmediateStmt &lhs, ImmediateStmt &rhs) {
+	return !(lhs == rhs);
+}
+#endif
+
+LabelStmt::LabelStmt(std::string label, Token token)
+	: Statement(label, token) { }
 
 LabelStmt::~LabelStmt() { }
+
+#ifdef TEST
+bool operator==(LabelStmt &lhs, LabelStmt &rhs) {
+	return lhs.instruction == rhs.instruction &&
+	       lhs.label == rhs.label &&
+		   lhs.operand == rhs.operand;
+}
+
+bool operator!=(LabelStmt &lhs, LabelStmt &rhs) {
+	return !(lhs == rhs);
+}
+#endif

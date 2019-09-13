@@ -53,6 +53,7 @@ build/nono/parser.o: src/nono/parser.cpp src/nono/parser.hpp src/nono/token.hpp\
 	g++ -o build/nono/parser.o -c src/nono/parser.cpp
 
 build/nono/test: src/nono/test.cpp src/nono/token.cpp src/nono/lexer.cpp\
-				 src/nono/token.hpp src/nono/lexer.hpp
+				 src/nono/token.hpp src/nono/lexer.hpp src/nono/parser.hpp\
+				 src/nono/parser.cpp src/nono/statement.hpp src/nono/statement.cpp
 	mkdir -p build/nono
 	g++ -o build/nono/test src/nono/test.cpp

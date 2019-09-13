@@ -34,7 +34,7 @@ bool Parser::isNoOperator(Token &token) {
 	       (token.lexeme == "HALT"  || token.lexeme == "ADD"   ||
 	        token.lexeme == "SUB"   || token.lexeme == "OR"    ||
 		    token.lexeme == "XOR"   || token.lexeme == "DROP"  ||
-		    token.lexeme == "OVER"  || token.lexeme == "STORE" ||
-			token.lexeme == "FETCH" || token.lexeme == "SWAP"  ||
-		    token.lexeme == "EXIT");
+			token.lexeme == "DUP"   || token.lexeme == "OVER"  ||
+			token.lexeme == "STORE" || token.lexeme == "FETCH" ||
+			token.lexeme == "SWAP"  || token.lexeme == "EXIT");
 }

@@ -7,9 +7,8 @@
 class Statement {
 public:
 	Statement(std::string label, Token token);
-	~Statement();
+	virtual ~Statement() = default;
 
-private:
 	// Instruction in the statement.
 	enum class Instruction {
 		HALT, ADD,  SUB,   AND,
@@ -21,28 +20,127 @@ private:
 
 	// Optional label for the statement.
 	std::string label = "";
+
+#ifdef TEST
+public:
+	virtual std::string toString() = 0;
+
+	std::string baseStr() {
+		std::string str = "label: ";
+		str += label;
+		str += ", instruction: ";
+
+		switch(instruction) {
+		case Instruction::HALT:
+			str += "HALT";
+			break;
+		case Instruction::ADD:
+			str += "ADD";
+			break;
+		case Instruction::SUB:
+			str += "SUB";
+			break;
+		case Instruction::OR:
+			str += "OR";
+			break;
+		case Instruction::XOR:
+			str += "XOR";
+			break;
+		case Instruction::DROP:
+			str += "DROP";
+			break;
+		case Instruction::DUP:
+			str += "DUP";
+			break;
+		case Instruction::OVER:
+			str += "OVER";
+			break;
+		case Instruction::SWAP:
+			str += "SWAP";
+			break;
+		case Instruction::STORE:
+			str += "STORE";
+			break;
+		case Instruction::FETCH:
+			str += "FETCH";
+			break;
+		case Instruction::LIT:
+			str += "LIT";
+			break;
+		case Instruction::IF:
+			str += "IF";
+			break;
+		case Instruction::CALL:
+			str += "CALL";
+			break;
+		case Instruction::EXIT:
+			str += "EXIT";
+			break;
+		default:
+			str += "";
+			break;
+		}
+
+		return str;
+	}
+#endif
 };
 
 class NooperatorStmt : public Statement {
 public:
 	NooperatorStmt(std::string label, Token token);
 	~NooperatorStmt();
+
+#ifdef TEST
+public:
+	std::string toString() {
+		std::string str = "{ ";
+		str += baseStr();
+		str += " }";
+
+		return str;
+	}
+#endif
 };
 
 class ImmediateStmt : public Statement {
 public:
-	ImmediateStmt();
+	ImmediateStmt(std::string label, Token token);
 	~ImmediateStmt();
 
-private:
 	uint8_t operand;
+
+#ifdef TEST
+public:
+	std::string toString() {
+		std::string str = "{ ";
+		str += baseStr();
+		str += ", operand:";
+		str += operand;
+		str += " }";
+
+		return str;
+	}
+#endif
 };
 
 class LabelStmt : public Statement {
 public:
-	LabelStmt();
+	LabelStmt(std::string label, Token token);
 	~LabelStmt();
 
-private:
 	std::string operand;
+
+#ifdef TEST
+public:
+	std::string toString() {
+		std::string str = "{ ";
+		str += baseStr();
+		str += ", operand:";
+		str += operand;
+		str += " }";
+
+		return str;
+	}
+#endif
 };

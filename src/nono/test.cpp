@@ -2,7 +2,10 @@
 
 #include "lexer.cpp"
 #include "token.cpp"
+#include "statement.cpp"
+#include "parser.cpp"
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -314,6 +317,142 @@ bool testLexerMixed() {
 	return true;
 }
 
+// Test nooperation statement parsing.
+bool testParserNoOperator() {
+	// Make a token vector to parse.
+	std::vector<Token> tokens;
+	std::vector<std::shared_ptr<Statement>> results;
+	std::string lexeme;
+
+	lexeme = "HALT";
+	Token t(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+
+	lexeme = "ADD";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	
+	lexeme = "SUB";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	
+	lexeme = "OR";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	
+	lexeme = "XOR";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	
+	lexeme = "DROP";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+
+	lexeme = "foo";
+	t = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	tokens.push_back(t);
+
+	lexeme = ":";
+	t = Token(Token::Type::COLON, lexeme, 1);
+	tokens.push_back(t);
+	
+	lexeme = "DUP";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("foo", t));
+	
+	lexeme = "OVER";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+
+	lexeme = "label";
+	t = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	tokens.push_back(t);
+
+	lexeme = ":";
+	t = Token(Token::Type::COLON, lexeme, 1);
+	tokens.push_back(t);
+	
+	lexeme = "SWAP";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("label", t));
+	
+	lexeme = "STORE";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	
+	lexeme = "FETCH";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	
+	lexeme = "EXIT";
+	t = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t);
+	results.push_back(std::make_shared<NooperatorStmt>("", t));
+	
+	// Parse.
+	Parser parser(tokens);
+	try {
+		parser.parse();
+	} catch (LexingError &error) {
+		std::cout << "Parsing failed! Exception encountered!" << std::endl;
+		return false;
+	}
+
+	// Check results.
+	if (parser.statements.size() != 12) {
+		reportMismatch("Parser nooperator", "12", parser.statements.size());
+		return false;
+	}
+
+	for(int i = 0; i < results.size(); i++) {
+		// Specialize pointer for parsed statements.
+		std::shared_ptr<NooperatorStmt> parsed_noop =
+			std::dynamic_pointer_cast<NooperatorStmt>(parser.statements[i]);
+		std::shared_ptr<ImmediateStmt> parsed_immop =
+			std::dynamic_pointer_cast<ImmediateStmt>(parser.statements[i]);
+		std::shared_ptr<LabelStmt> parsed_labelop =
+			std::dynamic_pointer_cast<LabelStmt>(parser.statements[i]);
+
+		// Specialize pointer for correct results.
+		std::shared_ptr<NooperatorStmt> result_noop =
+			std::dynamic_pointer_cast<NooperatorStmt>(results[i]);
+		std::shared_ptr<ImmediateStmt> result_immop =
+			std::dynamic_pointer_cast<ImmediateStmt>(results[i]);
+		std::shared_ptr<LabelStmt> result_labelop =
+			std::dynamic_pointer_cast<LabelStmt>(results[i]);
+
+		// Confront the two statements.
+		if (parsed_noop && result_noop) {
+			if (*parsed_noop != *result_noop) {
+				reportMismatch("Parser nooperator", 
+							   (*parsed_noop).toString(),
+							   (*result_noop).toString());
+				return false;
+			}
+
+			continue;
+		}
+
+		std::cout << "Expected a no-operand statement, found " 
+		          << (parser.statements[i]->toString())
+				  << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> lexerTests = {
@@ -326,7 +465,12 @@ int main() {
 		{ "Lexer mixed",                        &testLexerMixed                   },
 	};
 
+	std::vector<Test> parserTests = {
+		{ "Parser nooperator", &testParserNoOperator },
+	};
+
 	for (auto &test: lexerTests) allPass = runTest(test);
+	for (auto &test: parserTests) allPass = runTest(test);
 
 	if (allPass) return 0;
 	return 1;

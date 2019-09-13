@@ -10,6 +10,9 @@ class Parser {
 public:
 	Parser(std::vector<Token> &tokens);
 	~Parser();
+	
+	// Parse the token stream.
+	void parse();
 
 private:
 	// Iterators over the token stream.
@@ -18,4 +21,12 @@ private:
 	
 	// Currently parsed statements.
 	std::vector<std::shared_ptr<Statement>> statements;
+
+	// Statement-parsing functions (their names should match more or less the 
+	// names of the relative production rules in the grammar).
+	void statement();
+	void noOperator(std::string label);
+
+	// Helper functions.
+	static bool isNoOperator(Token &token);
 };

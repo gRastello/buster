@@ -1,10 +1,12 @@
 #pragma once
 
+#include "token.hpp"
+
 #include <string>
 
 class Statement {
 public:
-	Statement();
+	Statement(std::string label, Token token);
 	~Statement();
 
 private:
@@ -23,7 +25,7 @@ private:
 
 class NooperatorStmt : public Statement {
 public:
-	NooperatorStmt();
+	NooperatorStmt(std::string label, Token token);
 	~NooperatorStmt();
 };
 

@@ -42,7 +42,8 @@ build/nono/lexer.o: src/nono/lexer.cpp src/nono/lexer.hpp src/nono/token.hpp
 	mkdir -p build/nono
 	g++ -o build/nono/lexer.o -c src/nono/lexer.cpp
 
-build/nono/statement.o: src/nono/statement.cpp src/nono/statement.hpp
+build/nono/statement.o: src/nono/statement.cpp src/nono/statement.hpp\
+                        src/nono/token.hpp
 	mkdir -p build/nono
 	g++ -o build/nono/statement.o -c src/nono/statement.cpp
 

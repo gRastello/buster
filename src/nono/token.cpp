@@ -1,5 +1,7 @@
 #include "token.hpp"
 
+Token::Token() { }
+
 Token::Token(Type _type, std::string &_lexeme, uint64_t _line) {
 	type   = _type;
 	lexeme = _lexeme;

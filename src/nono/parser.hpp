@@ -30,3 +30,14 @@ private:
 	// Helper functions.
 	static bool isNoOperator(Token &token);
 };
+
+class ParsingError {
+public:
+	ParsingError(std::string _message, Token _token);
+	~ParsingError();
+
+	// The error message.
+	std::string message;
+	// The problematic token.
+	Token token;
+};

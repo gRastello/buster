@@ -317,6 +317,28 @@ bool testLexerMixed() {
 	return true;
 }
 
+// Test no production rule exception.
+bool testParserNoProductionRule() {
+	// Make a token vector to parse.
+	std::vector<Token> tokens;
+	std::string lexeme;
+	Token t;
+
+	lexeme = ":";
+	t = Token(Token::Type::COLON, lexeme, 1);
+	tokens.push_back(t);
+
+	// Parse.
+	Parser parser(tokens);
+	try {
+		parser.parse();
+		std::cout << "Parser no production rule: FAILED" << std::endl;
+		return false;
+	} catch (...) { /* don't check exception contents */ }
+
+	return true;
+}
+
 // Test nooperation statement parsing.
 bool testParserNoOperator() {
 	// Make a token vector to parse.
@@ -404,7 +426,7 @@ bool testParserNoOperator() {
 	Parser parser(tokens);
 	try {
 		parser.parse();
-	} catch (LexingError &error) {
+	} catch (ParsingError &error) {
 		std::cout << "Parsing failed! Exception encountered!" << std::endl;
 		return false;
 	}
@@ -466,7 +488,8 @@ int main() {
 	};
 
 	std::vector<Test> parserTests = {
-		{ "Parser nooperator", &testParserNoOperator },
+		{ "Parser no production rule", &testParserNoProductionRule },
+		{ "Parser nooperator",         &testParserNoOperator       },
 	};
 
 	for (auto &test: lexerTests) allPass = runTest(test);

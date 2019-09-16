@@ -5,6 +5,7 @@
 class Token {
 public:
 	enum class Type;
+	Token();
 	Token(Type type, std::string &lexeme, uint64_t line);
 	~Token();
 

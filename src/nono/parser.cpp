@@ -20,8 +20,14 @@ void Parser::statement() {
 		tokenStream += 2;
 	}
 
-	if (Parser::isNoOperator(*tokenStream)) noOperator(label);
-	// Add the missing cases here. Throw something if nothing words.
+	if (Parser::isNoOperator(*tokenStream)) {
+		noOperator(label);
+		return;
+	}
+
+	// Add the missing cases here.
+
+	throw ParsingError("No matching production rule for token", *tokenStream);
 }
 
 void Parser::noOperator(std::string label) {
@@ -38,3 +44,10 @@ bool Parser::isNoOperator(Token &token) {
 			token.lexeme == "STORE" || token.lexeme == "FETCH" ||
 			token.lexeme == "SWAP"  || token.lexeme == "EXIT");
 }
+
+ParsingError::ParsingError(std::string _message, Token _token) {
+	message = _message;
+	token = _token;
+}
+
+ParsingError::~ParsingError() { }

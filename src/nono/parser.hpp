@@ -25,7 +25,7 @@ private:
 	// Statement-parsing functions (their names should match more or less the 
 	// names of the relative production rules in the grammar).
 	void statement();
-	void noOperator(std::string label);
+	void noOperand(std::string label);
 
 	// Helper functions.
 	static bool isNoOperand(Token &token);

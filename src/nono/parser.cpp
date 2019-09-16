@@ -21,7 +21,7 @@ void Parser::statement() {
 	}
 
 	if (Parser::isNoOperand(*tokenStream)) {
-		noOperator(label);
+		noOperand(label);
 		return;
 	}
 
@@ -30,7 +30,7 @@ void Parser::statement() {
 	throw ParsingError("No matching production rule for token", *tokenStream);
 }
 
-void Parser::noOperator(std::string label) {
+void Parser::noOperand(std::string label) {
 	statements.push_back(std::make_shared<NoOperandStmt>(label, *tokenStream));
 	tokenStream++;
 }

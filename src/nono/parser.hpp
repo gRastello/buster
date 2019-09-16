@@ -26,9 +26,11 @@ private:
 	// names of the relative production rules in the grammar).
 	void statement();
 	void noOperand(std::string label);
+	void immediateOperand(std::string label);
 
 	// Helper functions.
 	static bool isNoOperand(Token &token);
+	static bool isImmediateOperand(Token &token);
 };
 
 class ParsingError {

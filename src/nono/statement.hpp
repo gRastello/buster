@@ -105,7 +105,9 @@ public:
 
 class ImmediateStmt : public Statement {
 public:
-	ImmediateStmt(std::string label, Token token);
+	ImmediateStmt(std::string label,
+	              Token instructionToken,
+				  Token immediateToken);
 	~ImmediateStmt();
 
 	uint8_t operand;

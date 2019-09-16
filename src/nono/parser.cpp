@@ -25,6 +25,11 @@ void Parser::statement() {
 		return;
 	}
 
+	if (Parser::isImmediateOperand(*tokenStream)) {
+		immediateOperand(label);
+		return;
+	}
+
 	// Add the missing cases here.
 
 	throw ParsingError("No matching production rule for token", *tokenStream);
@@ -35,6 +40,27 @@ void Parser::noOperand(std::string label) {
 	tokenStream++;
 }
 
+void Parser::immediateOperand(std::string label) {
+	Token instructionToken = *tokenStream;
+	tokenStream++;
+
+	if (tokenStream != tokenStreamEnd) {
+		if ((*tokenStream).type == Token::Type::NUMBER) {
+			statements.push_back(std::make_shared<ImmediateStmt>(
+				label,
+				instructionToken,
+				*tokenStream
+			));
+			tokenStream++;
+			return;
+		}
+
+		throw ParsingError("expected number but found", *tokenStream);
+	}
+
+	throw ParsingError("premature end of stream after", *(tokenStream - 1));
+}
+
 bool Parser::isNoOperand(Token &token) {
 	return token.type == Token::Type::INSTRUCTION &&
 	       (token.lexeme == "HALT"  || token.lexeme == "ADD"   ||
@@ -43,6 +69,10 @@ bool Parser::isNoOperand(Token &token) {
 			token.lexeme == "DUP"   || token.lexeme == "OVER"  ||
 			token.lexeme == "STORE" || token.lexeme == "FETCH" ||
 			token.lexeme == "SWAP"  || token.lexeme == "EXIT");
+}
+
+bool Parser::isImmediateOperand(Token &token) {
+	return token.type == Token::Type::INSTRUCTION && token.lexeme == "LIT";
 }
 
 ParsingError::ParsingError(std::string _message, Token _token) {

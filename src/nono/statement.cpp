@@ -103,8 +103,16 @@ bool operator!=(NoOperandStmt &lhs, NoOperandStmt &rhs) {
 }
 #endif
 
-ImmediateStmt::ImmediateStmt(std::string label, Token token)
-	: Statement(label, token) { }
+ImmediateStmt::ImmediateStmt(
+	std::string label,
+	Token instructionToken,
+	Token immediateToken) : Statement(label, instructionToken) {
+	std::string number(
+		immediateToken.lexeme.begin() + 2,
+		immediateToken.lexeme.end()
+	);
+	operand = std::stoi(number, nullptr, 16);
+}
 
 ImmediateStmt::~ImmediateStmt() { }
 

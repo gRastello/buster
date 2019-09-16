@@ -20,7 +20,7 @@ void Parser::statement() {
 		tokenStream += 2;
 	}
 
-	if (Parser::isNoOperator(*tokenStream)) {
+	if (Parser::isNoOperand(*tokenStream)) {
 		noOperator(label);
 		return;
 	}
@@ -35,7 +35,7 @@ void Parser::noOperator(std::string label) {
 	tokenStream++;
 }
 
-bool Parser::isNoOperator(Token &token) {
+bool Parser::isNoOperand(Token &token) {
 	return token.type == Token::Type::INSTRUCTION &&
 	       (token.lexeme == "HALT"  || token.lexeme == "ADD"   ||
 	        token.lexeme == "SUB"   || token.lexeme == "OR"    ||

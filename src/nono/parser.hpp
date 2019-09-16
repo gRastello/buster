@@ -28,7 +28,7 @@ private:
 	void noOperator(std::string label);
 
 	// Helper functions.
-	static bool isNoOperator(Token &token);
+	static bool isNoOperand(Token &token);
 };
 
 class ParsingError {

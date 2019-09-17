@@ -27,10 +27,12 @@ private:
 	void statement();
 	void noOperand(std::string label);
 	void immediateOperand(std::string label);
+	void labelOperand(std::string label);
 
 	// Helper functions.
 	static bool isNoOperand(Token &token);
 	static bool isImmediateOperand(Token &token);
+	static bool isLabelOperand(Token &token);
 };
 
 class ParsingError {

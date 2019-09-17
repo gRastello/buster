@@ -30,7 +30,10 @@ void Parser::statement() {
 		return;
 	}
 
-	// Add the missing cases here.
+	if (Parser::isLabelOperand(*tokenStream)) {
+		labelOperand(label);
+		return;
+	}
 
 	throw ParsingError("No matching production rule for token", *tokenStream);
 }
@@ -45,7 +48,7 @@ void Parser::immediateOperand(std::string label) {
 	tokenStream++;
 
 	if (tokenStream != tokenStreamEnd) {
-		if ((*tokenStream).type == Token::Type::NUMBER) {
+		if (tokenStream->type == Token::Type::NUMBER) {
 			statements.push_back(std::make_shared<ImmediateStmt>(
 				label,
 				instructionToken,
@@ -56,6 +59,27 @@ void Parser::immediateOperand(std::string label) {
 		}
 
 		throw ParsingError("expected number but found", *tokenStream);
+	}
+
+	throw ParsingError("premature end of stream after", *(tokenStream - 1));
+}
+
+void Parser::labelOperand(std::string label) {
+	Token instructionToken = *tokenStream;
+	tokenStream++;
+
+	if (tokenStream != tokenStreamEnd) {
+		if (tokenStream->type == Token::Type::IDENTIFIER) {
+			statements.push_back(std::make_shared<LabelStmt>(
+				label,
+				instructionToken,
+				*tokenStream
+			));
+			tokenStream++;
+			return;
+		}
+
+		throw ParsingError("expected identifier but found", *tokenStream);
 	}
 
 	throw ParsingError("premature end of stream after", *(tokenStream - 1));
@@ -73,6 +97,11 @@ bool Parser::isNoOperand(Token &token) {
 
 bool Parser::isImmediateOperand(Token &token) {
 	return token.type == Token::Type::INSTRUCTION && token.lexeme == "LIT";
+}
+
+bool Parser::isLabelOperand(Token &token) {
+	return token.type == Token::Type::INSTRUCTION &&
+	       (token.lexeme == "IF" || token.lexeme == "CALL");
 }
 
 ParsingError::ParsingError(std::string _message, Token _token) {

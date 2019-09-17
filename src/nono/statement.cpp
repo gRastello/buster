@@ -128,8 +128,12 @@ bool operator!=(ImmediateStmt &lhs, ImmediateStmt &rhs) {
 }
 #endif
 
-LabelStmt::LabelStmt(std::string label, Token token)
-	: Statement(label, token) { }
+LabelStmt::LabelStmt(
+	std::string label,
+	Token instructionToken,
+	Token labelToken) : Statement(label, instructionToken) {
+	operand = labelToken.lexeme;
+}
 
 LabelStmt::~LabelStmt() { }
 

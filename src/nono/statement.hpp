@@ -128,7 +128,9 @@ public:
 
 class LabelStmt : public Statement {
 public:
-	LabelStmt(std::string label, Token token);
+	LabelStmt(std::string label,
+	          Token instructionToken,
+			  Token labelToken);
 	~LabelStmt();
 
 	std::string operand;

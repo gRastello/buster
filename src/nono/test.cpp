@@ -340,7 +340,7 @@ bool testParserNoProductionRule() {
 }
 
 // Test nooperation statement parsing.
-bool testParserNoOperator() {
+bool testParserNoOperand() {
 	// Make a token vector to parse.
 	std::vector<Token> tokens;
 	std::vector<std::shared_ptr<Statement>> results;
@@ -564,6 +564,96 @@ bool testParserImmediate() {
 	return true;
 }
 
+// Test parsing label statements.
+bool testParserLabelStatement() {
+	// Make a token vector to parse.
+	std::vector<Token> tokens;
+	std::vector<std::shared_ptr<Statement>> results;
+	std::string lexeme;
+	Token t1, t2;
+
+	lexeme = "IF";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t1);
+
+	lexeme = "if_label";
+	t2 = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	tokens.push_back(t2);
+
+	results.push_back(std::make_shared<LabelStmt>("", t1, t2));
+
+	lexeme = "a_tag";
+	t1 = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	tokens.push_back(t1);
+
+	lexeme = ":";
+	t1 = Token(Token::Type::COLON, lexeme, 1);
+	tokens.push_back(t1);
+
+	lexeme = "CALL";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	tokens.push_back(t1);
+
+	lexeme = "subroutine_address";
+	t2 = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	tokens.push_back(t2);
+	
+	results.push_back(std::make_shared<LabelStmt>("a_tag", t1, t2));
+
+	// Parse.
+	Parser parser(tokens);
+	try {
+		parser.parse();
+	} catch (ParsingError &error) {
+		std::cout << "Parsing failed! Exception encountered!" << std::endl;
+		return false;
+	}
+
+	// Check results.
+	if (parser.statements.size() != 2) {
+		reportMismatch("Parser label", "2", parser.statements.size());
+		return false;
+	}
+
+	for(int i = 0; i < results.size(); i++) {
+		// Specialize pointer for parsed statements.
+		std::shared_ptr<NoOperandStmt> parsed_noop =
+			std::dynamic_pointer_cast<NoOperandStmt>(parser.statements[i]);
+		std::shared_ptr<ImmediateStmt> parsed_immop =
+			std::dynamic_pointer_cast<ImmediateStmt>(parser.statements[i]);
+		std::shared_ptr<LabelStmt> parsed_labelop =
+			std::dynamic_pointer_cast<LabelStmt>(parser.statements[i]);
+
+		// Specialize pointer for correct results.
+		std::shared_ptr<NoOperandStmt> result_noop =
+			std::dynamic_pointer_cast<NoOperandStmt>(results[i]);
+		std::shared_ptr<ImmediateStmt> result_immop =
+			std::dynamic_pointer_cast<ImmediateStmt>(results[i]);
+		std::shared_ptr<LabelStmt> result_labelop =
+			std::dynamic_pointer_cast<LabelStmt>(results[i]);
+
+		// Confront the two statements.
+		if (parsed_labelop && result_labelop) {
+			if (*parsed_labelop != *result_labelop) {
+				reportMismatch("Parser label", 
+							   parsed_labelop->toString(),
+							   result_labelop->toString());
+				return false;
+			}
+
+			continue;
+		}
+
+		std::cout << "Parser label: " << std::endl
+		          << "  Expected an immediate-operan statement, found " 
+		          << (parser.statements[i]->toString())
+				  << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> lexerTests = {
@@ -578,8 +668,9 @@ int main() {
 
 	std::vector<Test> parserTests = {
 		{ "Parser no production rule", &testParserNoProductionRule },
-		{ "Parser nooperator",         &testParserNoOperator       },
-		{ "Parser immediate operator", &testParserImmediate        },
+		{ "Parser nooperator",         &testParserNoOperand        },
+		{ "Parser immediate operand",  &testParserImmediate        },
+		{ "Parser label operand",      &testParserLabelStatement   },
 	};
 
 	for (auto &test: lexerTests) allPass = runTest(test);

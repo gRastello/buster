@@ -1,5 +1,6 @@
 #define TEST
 
+#include "analyzer.cpp"
 #include "lexer.cpp"
 #include "token.cpp"
 #include "statement.cpp"
@@ -654,6 +655,71 @@ bool testParserLabelStatement() {
 	return true;
 }
 
+// Test label analyzing.
+bool testAnalyzerLabelsOk() {
+	Token t1, t2;
+	std::string lexeme;
+
+	// Create a vector of statements.
+	std::vector<std::shared_ptr<Statement>> statements;
+
+	lexeme = "HALT";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	statements.push_back(std::make_shared<NoOperandStmt>("label1", t1));
+
+	lexeme = "IF";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	lexeme = "label1";
+	t2 = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	statements.push_back(std::make_shared<LabelStmt>("", t1, t2));
+
+	// Run the analyzer.
+	Analyzer analyzer(statements);
+
+	try {
+		analyzer.analyze();
+	} catch (std::vector<AnalyzingError> &errors) {
+		std::cout << "Analyzer labels: FAILED" << std::endl 
+		          << "  Encountered an exception, expected none" 
+				  << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+// Test label analying that fails.
+bool testAnalyzerLabelsFail() {
+	Token t1, t2;
+	std::string lexeme;
+
+	// Create a vector of statements.
+	std::vector<std::shared_ptr<Statement>> statements;
+
+	lexeme = "HALT";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	statements.push_back(std::make_shared<NoOperandStmt>("label1", t1));
+
+	lexeme = "IF";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	lexeme = "label2";
+	t2 = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	statements.push_back(std::make_shared<LabelStmt>("", t1, t2));
+
+	// Run the analyzer.
+	Analyzer analyzer(statements);
+
+	try {
+		analyzer.analyze();
+		std::cout << "Analyzer labels: FAILED" << std::endl 
+		          << "  Encountered an exception, expected none" 
+				  << std::endl;
+		return false;
+	} catch (std::vector<AnalyzingError> &errors) { }
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> lexerTests = {
@@ -673,8 +739,14 @@ int main() {
 		{ "Parser label operand",      &testParserLabelStatement   },
 	};
 
-	for (auto &test: lexerTests) allPass = runTest(test);
-	for (auto &test: parserTests) allPass = runTest(test);
+	std::vector<Test> analyzerTests = {
+		{ "Analyzer label check ok",    &testAnalyzerLabelsOk   },
+		{ "Analyzer label check throw", &testAnalyzerLabelsFail },
+	};
+
+	for (auto &test: lexerTests   ) allPass = runTest(test);
+	for (auto &test: parserTests  ) allPass = runTest(test);
+	for (auto &test: analyzerTests) allPass = runTest(test);
 
 	if (allPass) return 0;
 	return 1;

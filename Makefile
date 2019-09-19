@@ -57,6 +57,11 @@ build/nono/analyzer.o: src/nono/analyzer.cpp src/nono/analyzer.hpp\
 	mkdir -p build/nono
 	g++ -o build/nono/analyzer.o -c src/nono/analyzer.cpp
 
+build/nono/generator.o: src/nono/generator.cpp src/nono/generator.hpp\
+                        src/nono/statement.hpp
+	mkdir -p build/nono
+	g++ -o build/nono/generator.o -c src/nono/generator.cpp
+
 build/nono/test: src/nono/test.cpp src/nono/token.cpp src/nono/lexer.cpp\
 				 src/nono/token.hpp src/nono/lexer.hpp src/nono/parser.hpp\
 				 src/nono/parser.cpp src/nono/statement.hpp src/nono/statement.cpp\

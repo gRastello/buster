@@ -34,6 +34,18 @@ runtest: build/test
 
 # nono targets
 
+build/nono/nono: build/nono/token.o build/nono/lexer.o build/nono/statement.o\
+                 build/nono/parser.o build/nono/parser.o build/nono/analyzer.o\
+				 build/nono/generator.o build/nono/main.o
+	g++ -o build/nono/nono build/nono/main.o build/nono/token.o build/nono/lexer.o\
+	                       build/nono/statement.o build/nono/parser.o\
+						   build/nono/analyzer.o build/nono/generator.o
+
+build/nono/main.o: src/nono/main.cpp src/nono/lexer.hpp src/nono/parser.hpp\
+                   src/nono/analyzer.hpp src/nono/generator.hpp
+	mkdir -p build/nono
+	g++ -o build/nono/main.o -c src/nono/main.cpp
+
 build/nono/token.o: src/nono/token.cpp src/nono/token.hpp
 	mkdir -p build/nono
 	g++ -o build/nono/token.o -c src/nono/token.cpp

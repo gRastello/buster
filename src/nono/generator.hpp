@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GENERATOR_H
+#define GENERATOR_H
 
 #include "statement.hpp"
 
@@ -30,3 +31,5 @@ private:
 		{ Statement::Instruction::CALL,  0x60 }, { Statement::Instruction::EXIT,  0x61 },
 	};
 };
+
+#endif

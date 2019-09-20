@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LEXER_H
+#define LEXER_H
 
 #include "token.hpp"
 
@@ -59,9 +60,10 @@ public:
 	LexingError(uint64_t _line, std::string _message);
 	~LexingError();
 
-private:
 	// Line of the problematic token.
 	uint64_t line;
 	// Error message.
 	std::string message;
 };
+
+#endif

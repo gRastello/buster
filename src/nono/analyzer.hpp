@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANALYZER_H
+#define ANALYZER_H
 
 #include "statement.hpp"
 
@@ -10,7 +11,6 @@ public:
 	AnalyzingError(std::string _message);
 	~AnalyzingError();
 
-private:
 	// Error message.
 	std::string message;
 };
@@ -30,3 +30,5 @@ private:
 	// Check that all labels are meaningful.
 	std::vector<AnalyzingError> checkLabels();
 };
+
+#endif

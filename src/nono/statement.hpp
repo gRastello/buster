@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STATEMENT_H
+#define STATEMENT_H
 
 #include "token.hpp"
 
@@ -148,3 +149,4 @@ public:
 	}
 #endif
 };
+#endif

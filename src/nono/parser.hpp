@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PARSER_H
+#define PARSER_H
 
 #include "statement.hpp"
 #include "token.hpp"
@@ -45,3 +46,5 @@ public:
 	// The problematic token.
 	Token token;
 };
+
+#endif

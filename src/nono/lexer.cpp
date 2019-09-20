@@ -17,10 +17,6 @@ void Lexer::scan() {
 		lexemeStart = source;
 		scanToken();
 	}
-
-	// Add the END token.
-	lexemeStart = source;
-	addToken(Token::Type::END);
 }
 
 void Lexer::addToken(Token::Type type) {

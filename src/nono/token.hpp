@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TOKEN_H
+#define TOKEN_H
 
 #include <string>
 
@@ -19,7 +20,6 @@ public:
 	// Line number (for error reporting).
 	uint64_t line;
 
-#ifdef TEST
 	std::string toString() {
 		std::string str = "{ type: ";
 
@@ -50,5 +50,6 @@ public:
 
 		return str;
 	}
-#endif
 };
+
+#endif

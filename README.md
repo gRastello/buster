@@ -2,7 +2,7 @@
 Buster is a simple generic virtual stack machine (loosely based on the information available [here](https://users.ece.cmu.edu/~koopman/stack_computers/sec3_2.html)) wrote out of boredom (and some desire to understand something new).
 
 ## Building and testing
-Buster does not depend on any external library, you'll just need `g++` and the C++ standard library to compile it. The following will compile tests, run them and, if all tests passed successfully, compile the `buster` executable:
+Buster does not depend on any external library, you'll just need `g++` and the C++ standard library to compile it. The following will compile tests, run them and, if all tests passed successfully, compile the `buster` and `nono` executables:
 
 ```
 make
@@ -52,7 +52,7 @@ If an unknown opcode in encountered then an `HALT` instruction is executed.
 
 The only two registers that Buster has are the program counter `pc` that point to the next instruction to be executed and the stack pointer `sp` that point to a memory cell immediately next the current first element of the stack. The stack pointer is initialized to `0xFFFF` and grows downwards (so if we push three elements it now points to `0xFFFC`), the program counter is initialized at `0x0000`. When a program is loaded it's contents are loaded in memory starting from `0x0000`, each memory cell is always initialized to `0x0000`.
 
-Currently the only way to write programs for buster is to fire up an hex editor and write down all the opcodes manually (see next section). As a reference this is the content of `examples/sum`, visualized through `xxd`:
+Currently the only way to write programs for buster is to fire up an hex editor and write down all the opcodes manually (not anymore: see next section). As a reference this is the content of `examples/sum`, visualized through `xxd`:
 
 ```
 00000000: 40f1 4001 1000                           @.@...
@@ -60,5 +60,22 @@ Currently the only way to write programs for buster is to fire up an hex editor 
 
 Indeed `examples/sum` just sums `0xf1` and `0x01` and leaves the result on the stack.
 
-## Ideas for Buster
-Writing programs for Buster is a real pain so I'm thinking of writing an assembler (that will run on the host machine and not on Buster itself).
+## Using Nono, an assembler for Buster
+Nono is an assembler for a simple assembly language. You can find a simple sketch of the formal grammar for it by reading [grammar.md](./src/nono/grammar.md) or you can read "real life" examples in the `examples` directory (check out the files with the `.buster` extension). The general use of Nono is:
+
+```
+./build/nono/nono source_file.buster > buster_executable
+```
+
+I'm super lazy so Nono does not write to files by itself but rather dump machine code to stdout that you can redirect to a file using your shell (I'm assuming a POSIX `sh` derivative here). As a further example this is how you would go to write, assemble and execute the program above that sums `0xF1` and `0x01` and leaves the result on Buster's stack:
+
+```
+$ cat > sum.buster
+LIT 0xF1
+LIT 0x01
+ADD
+HALT
+$ ./build/nono/nono sum.buster > sum
+$ ./build/buster sum
+The machine halted!
+```

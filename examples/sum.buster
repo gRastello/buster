@@ -1,0 +1,4 @@
+LIT 0x01
+LIT 0x02
+ADD
+HALT

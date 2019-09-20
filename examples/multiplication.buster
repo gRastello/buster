@@ -1,0 +1,36 @@
+LIT 0x0A
+LIT 0x03
+LIT 0x00
+
+loop:
+SWAP     
+DUP
+IF    return
+SWAP
+LIT   0x00
+LIT   0x00
+STORE
+SWAP
+DUP
+LIT   0x00
+LIT   0x00
+FETCH
+ADD
+LIT   0x00
+LIT   0x00
+STORE
+SWAP
+LIT   0x01
+SWAP
+SUB
+LIT   0x00
+LIT   0x00
+FETCH
+LIT 0x00
+IF loop
+
+return:
+DROP
+SWAP
+DROP
+HALT

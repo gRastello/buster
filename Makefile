@@ -1,6 +1,6 @@
 # buster targets
 
-default: buster
+default: buster nono
 
 buster: runtest build/main.o build/buster.o build/cpu.o build/bus.o
 	g++ -o build/buster build/main.o build/buster.o build/cpu.o build/bus.o
@@ -34,10 +34,10 @@ runtest: build/test
 
 # nono targets
 
-build/nono/nono: runnonotest\
-                 build/nono/token.o build/nono/lexer.o build/nono/statement.o\
-                 build/nono/parser.o build/nono/parser.o build/nono/analyzer.o\
-				 build/nono/generator.o build/nono/main.o
+nono: runnonotest\
+      build/nono/token.o build/nono/lexer.o build/nono/statement.o\
+      build/nono/parser.o build/nono/parser.o build/nono/analyzer.o\
+      build/nono/generator.o build/nono/main.o
 	g++ -o build/nono/nono build/nono/main.o build/nono/token.o build/nono/lexer.o\
 	                       build/nono/statement.o build/nono/parser.o\
 						   build/nono/analyzer.o build/nono/generator.o

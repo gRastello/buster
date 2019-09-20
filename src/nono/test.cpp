@@ -55,17 +55,8 @@ bool testLexerWhitespace() {
 		return false;
 	}
 
-	if (lexer.tokens.size() != 1) {
-		reportMismatch("Lexer whitespace", "1", lexer.tokens.size());
-		return false;
-	}
-
-	std::string lexeme = "";
-	Token t(Token::Type::END, lexeme, 4);
-	if (lexer.tokens[0] != t) {
-		reportMismatch("Lexer whitespace",
-		               t.toString(),
-					   lexer.tokens[0].toString());
+	if (lexer.tokens.size() != 0) {
+		reportMismatch("Lexer whitespace", "0", lexer.tokens.size());
 		return false;
 	}
 
@@ -85,8 +76,8 @@ bool testLexerColon() {
 	}
 
 	// Check results.
-	if (lexer.tokens.size() != 3) {
-		reportMismatch("Lexer colon", "3", lexer.tokens.size());
+	if (lexer.tokens.size() != 2) {
+		reportMismatch("Lexer colon", "2", lexer.tokens.size());
 		return false;
 	}
 
@@ -123,8 +114,8 @@ bool testLexerNumbers() {
 	}
 
 	// Check results.
-	if (lexer.tokens.size() != 3) {
-		reportMismatch("Lexer numbers", "3", lexer.tokens.size());
+	if (lexer.tokens.size() != 2) {
+		reportMismatch("Lexer numbers", "2", lexer.tokens.size());
 		return false;
 	}
 
@@ -195,17 +186,8 @@ bool testLexerComments() {
 	}
 
 	// Check results.
-	if (lexer.tokens.size() != 1) {
-		reportMismatch("Lexer comments", "1", lexer.tokens.size());
-		return false;
-	}
-
-	std::string lexeme = "";
-	Token t(Token::Type::END, lexeme, 2);
-	if (lexer.tokens[0] != t) {
-		reportMismatch("Lexer comments",
-		               t.toString(),
-					   lexer.tokens[0].toString());
+	if (lexer.tokens.size() != 0) {
+		reportMismatch("Lexer comments", "0", lexer.tokens.size());
 		return false;
 	}
 
@@ -225,9 +207,9 @@ bool testLexerInstructionsIdentifiers() {
 	}
 
 	// Check results.
-	if (lexer.tokens.size() != 3) {
+	if (lexer.tokens.size() != 2) {
 		reportMismatch("Lexer instructions and identifiers", 
-					   "3",
+					   "2",
 					   lexer.tokens.size());
 		return false;
 	}
@@ -266,7 +248,7 @@ bool testLexerMixed() {
 	}
 
 	// Check results.
-	if (lexer.tokens.size() != 6) {
+	if (lexer.tokens.size() != 5) {
 		reportMismatch("Lexer mixed", "5", lexer.tokens.size());
 		return false;
 	}

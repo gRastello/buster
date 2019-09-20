@@ -1,6 +1,7 @@
 #define TEST
 
 #include "analyzer.cpp"
+#include "generator.cpp"
 #include "lexer.cpp"
 #include "token.cpp"
 #include "statement.cpp"
@@ -720,6 +721,79 @@ bool testAnalyzerLabelsFail() {
 	return true;
 }
 
+// Test code generatin.
+bool testGenerator() {
+	Token t1, t2;
+	std::string lexeme;
+	
+	// Create a vector of statements and the results of the generation.
+	std::vector<std::shared_ptr<Statement>> statements;
+	std::vector<uint8_t> results = { 
+		0x10,             // label1: ADD
+		0x50, 0x00, 0x00, //         IF   label1
+		0x60, 0x00, 0x07, //         CALL label2
+		0x40, 0xFC,       // label2: LIT  0xFC
+		0x11,             // label3: SUB
+		0x50, 0x00, 0x09, //         IF   label3
+	};
+
+	lexeme = "ADD";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	statements.push_back(std::make_shared<NoOperandStmt>("label1", t1));
+
+	lexeme = "IF";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+
+	lexeme = "label1";
+	t2 = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	statements.push_back(std::make_shared<LabelStmt>("", t1, t2));
+
+	lexeme = "CALL";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+
+	lexeme = "label2";
+	t2 = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	statements.push_back(std::make_shared<LabelStmt>("", t1, t2));
+
+	lexeme = "LIT";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+
+	lexeme = "0xFC";
+	t2 = Token(Token::Type::NUMBER, lexeme, 1);
+	statements.push_back(std::make_shared<ImmediateStmt>("label2", t1, t2));
+
+	lexeme = "SUB";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+	statements.push_back(std::make_shared<NoOperandStmt>("label3", t1));
+
+	lexeme = "IF";
+	t1 = Token(Token::Type::INSTRUCTION, lexeme, 1);
+
+	lexeme = "label3";
+	t2 = Token(Token::Type::IDENTIFIER, lexeme, 1);
+	statements.push_back(std::make_shared<LabelStmt>("", t1, t2));
+
+	// Generate code.
+	Generator generator(statements);
+	std::vector<uint8_t> code = generator.generate();
+
+	// Check results.
+	if (code.size() != 13) {
+		reportMismatch("Generator", "13", code.size());
+		return false;
+	}
+
+	size_t i;
+	for (i = 0; i < results.size(); i++) {
+		if (code[i] != results[i]) {
+			reportMismatch("Generator", std::to_string(results[i]), code[i]);
+			return false;
+		}
+	}
+
+	return true;
+}
+
 int main() {
 	bool allPass = true;
 	std::vector<Test> lexerTests = {
@@ -743,10 +817,15 @@ int main() {
 		{ "Analyzer label check ok",    &testAnalyzerLabelsOk   },
 		{ "Analyzer label check throw", &testAnalyzerLabelsFail },
 	};
+	
+	std::vector<Test> generatorTests = {
+		{ "Generator", &testGenerator },
+	};
 
-	for (auto &test: lexerTests   ) allPass = runTest(test);
-	for (auto &test: parserTests  ) allPass = runTest(test);
-	for (auto &test: analyzerTests) allPass = runTest(test);
+	for (auto &test: lexerTests    ) allPass = runTest(test);
+	for (auto &test: parserTests   ) allPass = runTest(test);
+	for (auto &test: analyzerTests ) allPass = runTest(test);
+	for (auto &test: generatorTests) allPass = runTest(test);
 
 	if (allPass) return 0;
 	return 1;

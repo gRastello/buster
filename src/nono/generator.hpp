@@ -11,11 +11,15 @@ public:
 	Generator(std::vector<std::shared_ptr<Statement>> _statements);
 	~Generator();
 
+	// Generate Buster machine code.
+	std::vector<uint8_t> generate();
+
 private:
 	// Statements from which to generate the machine code.
 	std::vector<std::shared_ptr<Statement>> statements;
 
-	std::unordered_map<Statement::Instruction, uint8_t> opcode = {
+	// Instructions opcodes map.
+	std::unordered_map<Statement::Instruction, uint8_t> opcodes = {
 		{ Statement::Instruction::HALT,  0x00 }, { Statement::Instruction::ADD,   0x10 },
 		{ Statement::Instruction::SUB,   0x11 }, { Statement::Instruction::AND,   0x12 },
 		{ Statement::Instruction::OR,    0x13 }, { Statement::Instruction::XOR,   0x14 },
